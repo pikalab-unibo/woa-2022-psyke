@@ -1,0 +1,65 @@
+% !TeX root = woa-2021-psyke.tex
+\usepackage[utf8]{inputenc}
+\usepackage{cleveref}
+\usepackage{listings}
+\usepackage[inline]{enumitem}
+\usepackage[margin=20pt]{subfig}
+% \usepackage{pifont}
+\usepackage{amsmath}
+\usepackage{multirow}
+
+% If you use the hyperref package, please uncomment the following line
+% to display URLs in blue roman font according to Springer's eBook style:
+% \renewcommand\UrlFont{\color{blue}\rmfamily}
+
+% Macros
+\newcommand{\twopkt}{\textsc{2P-Kt}}
+\newcommand{\tuprolog}{tuProlog}
+\newcommand{\xai}{XAI}
+\newcommand{\psyke}{PSyKE}
+\newcommand{\real}{\textsc{REAL}}
+\newcommand{\trepan}{\textsc{Trepan}}
+\newcommand{\iter}{\textsc{Iter}}
+\newcommand{\gridex}{GridEx}
+\newcommand{\gridrex}{GridREx}
+\newcommand{\cart}{\textsc{Cart}}
+
+\newenvironment{inlinelist}{\begin{enumerate*}[label=\emph{(\roman{*})}]}{\end{enumerate*}}
+
+\usepackage{todonotes}
+\newcommand{\gcnote}[1]{{\todo[color=green,inline]{\textbf{Ciatto:} #1}}}
+\newcommand{\gctodo}[1]{{\todo[size=\tiny,color=green]{\textbf{Ciatto:} #1}}}
+\newcommand{\fsnote}[1]{{\todo[color=cyan,inline]{\textbf{Sabba:} #1}}}
+\newcommand{\fstodo}[1]{{\todo[size=\tiny,color=cyan]{\textbf{Sabba:} #1}}}
+\newcommand{\rcnote}[1]{{\todo[color=magenta,inline]{\textbf{RC:} #1}}}
+\newcommand{\rctodo}[1]{{\todo[size=\tiny,color=magenta]{\textbf{RC:} #1}}}
+
+\lstset{
+	showstringspaces=false,
+	basicstyle=\small\ttfamily,
+	commentstyle={\color{olive}},
+	identifierstyle=\color{black},
+	ndkeywordstyle={\color{blue}},
+	stringstyle={\color{magenta}},
+	emphstyle={},
+	keywordstyle={\color{blue}},
+	breaklines=true,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=10pt,
+	tabsize=2,
+	extendedchars=true,
+	frame=trBL,
+	frameround=fttt,
+}
+
+\newcommand{\mofn}{\emph{M-of-N}}
+\newcommand{\kt}[1]{\texttt{#1}}
+\newcommand{\pl}[1]{\texttt{#1}}
+
+\newcommand{\meta}[1]{\langle#1\rangle}
+\newcommand{\var}[1]{\texttt{#1}}
+\newcommand{\const}[1]{\texttt{#1}}
+\newcommand{\logicrule}[2]{#1 & \texttt{:-} & #2}
+
+\newcommand*{\vurl}[1]{\url{#1} [Online; last accessed July 5, 2022]}

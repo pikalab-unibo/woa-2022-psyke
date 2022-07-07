@@ -1,0 +1,21 @@
+% !TeX root = woa-2021-psyke.tex
+
+\begin{table}
+	\caption{Comparison between accuracy and F1 scores for several instances of \gridex{} having different hyper-parameters. Fidelity measurements are reported inside the parentheses.}
+	\label{tab:gridex}
+	\begin{tabular}{c|c|c|c|ccc}
+		\toprule
+		& Adaptive & & Accuracy & \multicolumn{3}{c}{F1-score}\\
+ 		Depth & strategy & \# of rules & score & Setosa & Virginica & Versicolor \\
+		\midrule
+		1 & (0.85, 5) & 3 & 0.87 (0.90) & 1.00 (1.00) & 0.84 (0.87) & 0.82 (0.86) \\
+		\textbf{1} & \textbf{(0.85, 8)} & \textbf{3} & \textbf{0.94 (0.97)} & \textbf{1.00 (1.00)} & \textbf{0.92 (0.96)} & \textbf{0.93 (0.96)} \\
+		1 & (0.85, 10) & 3 & 0.87 (0.90) & 1.00 (1.00) & 0.84 (0.87) & 0.82 (0.86) \\
+		2 & (0.85, 5) & 6 & 0.89 (0.91) & 1.00 (1.00) & 0.86 (0.88) & 0.83 (0.88) \\
+		2 & (0.85, 8) & 6 & 0.94 (0.97) & 1.00 (1.00) & 0.92 (0.96) & 0.93 (0.96) \\
+		2 & (0.85, 10) & 6 & 0.89 (0.91) & 1.00 (1.00) & 0.86 (0.88) & 0.83 (0.88) \\
+		2 & (0.75, 5) & 8 & 0.93 (0.94) & 1.00 (1.00) & 0.89 (0.91) & 0.91 (0.93) \\
+		2 & (0.75, 2) & 11 & 0.69 (0.69) & 0.87 (0.87) & 0.74 (0.74) & 0.39 (0.39) \\
+		\bottomrule
+	\end{tabular}
+\end{table}

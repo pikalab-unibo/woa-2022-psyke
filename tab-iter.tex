@@ -1,0 +1,21 @@
+% !TeX root = woa-2021-psyke.tex
+
+\begin{table}
+	\caption{Comparison between accuracy and F1 scores for several instances of \iter{} having different hyper-parameters. Fidelity measurements are reported inside the parentheses.}
+	\label{tab:iter}
+	\begin{tabular}{c|c|c|c|c|ccc}
+		\toprule
+		Update & Starting & Min. & \# of & Accuracy & \multicolumn{3}{c}{F1-score}\\
+ 		size & points & examples & rules & score & Setosa & Virginica & Versicolor \\
+		\midrule
+		0.10 & 1 & 75 & 4 & 0.84 (0.87) & 1.00 (1.00) & 0.81 (0.84) & 0.78 (0.82) \\
+		0.10 & 1 & 150 & 4 & 0.84 (0.87) & 1.00 (1.00) & 0.81 (0.84) & 0.78 (0.82) \\
+		0.10 & 3 & 75 & 3 & 0.84 (0.87) & 1.00 (1.00) & 0.81 (0.84) & 0.78 (0.82) \\
+		0.10 & 3 & 150 & 4 & 0.84 (0.87) & 1.00 (1.00) & 0.81 (0.84) & 0.78 (0.82) \\
+		\textbf{0.07} & \textbf{1} & \textbf{75} & \textbf{3} & \textbf{0.94 (0.97)} & \textbf{1.00 (1.00)} & \textbf{0.92 (0.96)} & \textbf{0.93 (0.97)} \\
+		\textbf{0.07} & \textbf{1} & \textbf{150} & \textbf{3} & \textbf{0.94 (0.97)} & \textbf{1.00 (1.00)} & \textbf{0.92 (0.96)} & \textbf{0.93 (0.97)} \\
+		0.07 & 3 & 75 & 4 & 0.94 (0.97) & 1.00 (1.00) & 0.92 (0.96) & 0.93 (0.97) \\
+		0.07 & 3 & 150 & 6 & 0.94 (0.97) & 1.00 (1.00) & 0.92 (0.96) & 0.93 (0.97) \\
+		\bottomrule
+	\end{tabular}
+\end{table}

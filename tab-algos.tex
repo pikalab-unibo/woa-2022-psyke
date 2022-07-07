@@ -1,0 +1,20 @@
+% !TeX root = ia-2021-psyke.tex
+
+\begin{table}
+	\caption{Summary of the knowledge-extraction algorithms supported by \psyke{}.}
+	\label{tab:psyke}
+	\begin{tabular}{llllll}
+		\toprule
+		Extraction & Ref. & Task & Input Features & Output type & Knowledge Shape \\
+		Algorithm & & & & & \\
+		\midrule
+		\real{} & \cite{craven1994using} & Classification & Binary & String label & Rule list \\
+		\trepan{} & \cite{craven1996extracting} & Classification & Binary & String label & Decision tree \\
+		\iter{} & \cite{huysmans2006iter} & Regression & Continuous & Numerical constant & Rule list \\
+		\gridex{} & \cite{gridex-extraamas2021} & Regression & Continuous & Numerical constant & Rule list \\
+		\gridrex{} & \cite{gridrex-kr2022} & Regression & Continuous & Regression law & Rule list \\
+		\cart{} & \cite{breiman1984classification} & Classification, & Any & String label, & Decision tree \\
+		& & Regression & & Numerical constant & \\
+		\bottomrule
+	\end{tabular}
+\end{table}
