@@ -16,7 +16,7 @@
 \conference{WOA 2022: Workshop ``From Objects to Agents'', September 1--3, 2022, Genoa, Italy}
 
 %%
-\title{Formal Generalisation of Symbolic Knowledge Extraction Algorithms: Shattering Task Constraints}
+\title{Hypercube-based methods for symbolic knowledge extraction: towards a unified model}
 
 %%
 \author[1]{Federico Sabbatini}[%
@@ -49,21 +49,19 @@ url=http://andreaomicini.apice.unibo.it
 \cortext[1]{Corresponding author.}
 
 \begin{abstract}
-Symbolic knowledge-extraction (SKE) algorithms proposed by the explainable artificial intelligence community to obtain human-intelligible explanations for opaque predictors' behaviour are currently studied and developed with growing interest.
+Symbolic knowledge-extraction (SKE) algorithms proposed by the explainable artificial intelligence community to obtain human-intelligible explanations for opaque machine learning predictors are currently being studied and developed with growing interest.
 %
-Choosing the most adequate extraction procedure amongst the existing in the literature becomes more and more challenging with the design of new methods.
+However, choosing the most adequate extraction procedure amongst the many existing into the literature is becoming more and more challenging, as the amount of available method increases.
 %
-However, the majority of the proposed algorithms come along with restricting application constraints, for instance regarding the underlying black-box structure, the kind of the task at hand, or the nature of input features.
-%
-The former limitation is overcome by \emph{pedagogical} extractors, applicable to any kind of black box regardless of their internal structure.
-%
-The latter may be bypassed thanks to feature manipulation, e.g., discretisation of continuous features or one-hot encoding of real-valued features.
-%
-Unfortunately, no workarounds exist to adapt extractors explicitly designed for regression to classification tasks, especially if they perform generalisations via averaging operations and threshold-based similarity comparisons.
+In fact, most of the proposed algorithms come with \emph{constraints} concerning the situations they can be applied into.
 
-Accordingly, in this paper we propose an adaptation of SKE techniques aimed at extending the application of these algorithms without being subject to task limitations.
+In this paper we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
 %
-We show that further manipulations may be horizontally enabled for a large class of knowledge extractors without the need to revise their algorithms, but only adding our proposed generalisation.
+Despite being commonly considered regression-specific, in this paper we discuss why hypercube-based SKE methods are flexible enough to deal with classification problems as well.
+%
+More generally, we propose a common metamodel for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
+%
+% We show that further manipulations may be horizontally enabled for a large class of knowledge extractors without the need to revise their algorithms, but only adding our proposed generalisation.
 %
 We also report as a concrete example the implementation of the proposed generalisation in the \psyke{} framework.
 \end{abstract}
@@ -71,9 +69,12 @@ We also report as a concrete example the implementation of the proposed generali
 %%
 %% Keywords.
 \begin{keywords}
-	explainable AI \sep
-  	knowledge extraction \sep
-	interpretable prediction \sep
+	explainable AI 
+	\sep
+  	knowledge extraction 
+	\sep
+	interpretable prediction 
+	\sep
   	PSyKE
 \end{keywords}
 
@@ -767,7 +768,6 @@ It worths noting that \gridex{} do not provide a classification rule for a small
 	\end{inlinelist}
 \end{acknowledgments}
 
-\bibliographystyle{ceurart}
 \bibliography{woa-2022-psyke}
 
 \end{document}
