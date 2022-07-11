@@ -82,6 +82,8 @@ We also report as a concrete example the implementation of the proposed generali
 
 \section{Introduction}
 
+\gcnote{Leggete la nuova intro \& abstract. Se vi piace ristrutturiamo il paper, se no rollbackiamo e teniamo la versione di fede.}
+
 % Many everyday tasks are currently carried out mainly via machine learning (ML) models~\cite{rocha2012far}.
 % %
 % Their increasing ubiquity descends from the impressive predictive performance they exhibit when used to support decision making in a wide variety of application fields, for instance customer profiling, financial forecasting, speech and image recognition, etc.
@@ -425,7 +427,32 @@ As for the knowledge provided in output by extractors, it is possible to choose 
 %
 Input data as well may follow Semantic Web encoding, so \psyke{} extractors accept tabular data or knowledge graphs stored in OWL ontologies.
 
-\section{Generalisation of SKE algorithms}\label{sec:contribution}
+\section{Hypercube-based methods}\label{sec:contribution}
+
+\subsection{Unified Model}
+
+\gcnote{Fuffa un po' e riempi fin dove arrivi, domani penso al resto}
+
+1. Partition the input space
+
+2. Approximate decisions, per-partition
+
+3. Convert partition-decision couples into rules
+
+\subsection{Comparison of Existing Methods}
+
+\gcnote{Fuffa un po' e riempi fin dove arrivi, domani penso al resto}
+
+1. How algorithms partition the input space
+
+2. Different ways for approximating decisions
+    + How algorithms approximate decisions
+
+3. How algorithms construct rules
+
+\subsection*{[OLD] Section heading}
+
+\gcnote{Da qui in poi si può togliere, ma te lo lascio perchè magari buona parte di ste robe si spargono nel resto}
 
 The application of SKE algorithms may benefit of a generalisation to make them usable in a wider range of contexts.
 %
@@ -433,7 +460,7 @@ This work focuses on the generalisation of procedures extracting rules by means 
 %
 In particular, only pedagogical methods are considered, to avoid limitations deriving from the underlying BB type. %, but adequate \emph{ad hoc} extensions may be designed for decompositional algorithms starting from 
 %
-\subsection{A general rule extractor}
+\subsection{[OLD] A general rule extractor}
 
 %A generic extractor $E$ applied to explain a predictor $P$ trained upon a data set $D$ is able to provide rules in the following most general form:
 %
@@ -509,7 +536,7 @@ The example assumes a 2-dimensional data set with continuous input features both
 %
 %where $mode(P(D))$ is the output label occurring more often amongst the predictions of $P$ when applied to the data set $D$.
 
-\subsection{A general similarity criterion}
+\subsection{[OLD] A general similarity criterion}
 
 Analogous considerations may be carried out about the similarity criteria for subregions of the input feature space, that may be considered similar according to the following definitions:
 %
@@ -601,7 +628,13 @@ In \Cref{fig:general-error} are reported examples of predictive errors measured 
 %
 The three plots follow the same logic as \Cref{fig:general-pred}.
 
-\section{Case Study: The Iris Data Set}\label{sec:experiments}
+\section{Case Study: \psyke}\label{sec:experiments}
+
+\gcnote{Al posto di parlare di come supportiamo la classificazione, parlerei farei esempi in cui si mostra:
+1. how regression related experiments may be re-used for classification
+2. focus on how locally-linear approximation may be exploited for regression
+3. più tutto ciò che ti sembra sensato presentare dato il discorso di cui sopra.
+}
 
 In the following we report the effectiveness of our proposed generalisation implemented for the \iter{} and \gridex{} extraction algorithms, both designed for regression and here applied to explain a classifier.
 %
@@ -763,7 +796,7 @@ A similar reasoning may be performed about the extractors' fidelity, equal to 0.
 
 It worths noting that \gridex{} do not provide a classification rule for a small input space region, since it finds that region as negligible (because there are not data set instances belonging to it).
 
-\section{Conclusions}\label{sec:conclusions}
+\section{Conclusions and Future Works}\label{sec:conclusions}
 
 
 
