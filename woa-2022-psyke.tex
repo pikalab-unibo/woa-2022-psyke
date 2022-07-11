@@ -367,7 +367,7 @@ Pruning techniques may be exploited after the extraction to reduce the number of
 	\label{fig:psyke-design}
 \end{figure}
 
-\input{tab-algos.tex}
+\input{tables/tab-algos.tex}
 
 The \psyke{}~\cite{psyke-woa2021,psyke-ia2022} software library is a Python framework providing general-purpose support to SKE.
 %
@@ -611,7 +611,7 @@ Finally, the output knowledge readability is expressed as number of extracted ru
 
 \subsection{Predictor training}
 
-\input{tab-predictor.tex}
+\input{tables/tab-predictor.tex}
 
 Extraction techniques require an underlying BB to be used as an oracle.
 %
@@ -627,7 +627,7 @@ The decision boundaries of the selected 9-NN are reported in \Cref{fig:knn}.
 
 \subsection{\cart{}}
 
-\input{tab-cart}
+\input{tables/tab-cart}
 
 The \cart{} extractor has been applied to the 9-NN to extract human-intelligible knowledge in Prolog syntax, without discretising the input data set.
 %
@@ -635,13 +635,7 @@ Differently from \iter{} and \gridex{}, \cart{} is able to work upon discretised
 %
 Training the model with a maximum leaf amount of 3 gives the following theory, composed of 3 rules---namely, one per each possible class of the Iris data set.
 
-\begin{lstlisting}[language=Prolog]
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, setosa) :-
-    PetalLength =< 2.35.
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, versicolor) :-
-    PetalWidth =< 1.75.
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, virginica).
-\end{lstlisting}
+\lstinputlisting[language=Prolog]{listings/iris-rules-cart.pl}
 
 The theory is always exhaustive, since it is always possible to find a leaf classifying an instance.
 %
@@ -653,7 +647,7 @@ In this example, only petal width and length are considered to assign class labe
 
 \subsection{\iter{}}
 
-\input{tab-iter}
+\input{tables/tab-iter}
 
 The \iter{} algorithm has been applied as well to explain the 9-NN.
 %
@@ -673,23 +667,13 @@ The results of our experiments for \iter{} are reported in \Cref{tab:iter}.
 %
 The best predictive performance, achieved with the parameters highlighted in bold font in the Table, correspond to the following rules.
 %
-\begin{lstlisting}[language=Prolog]
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, setosa) :-
-    SepalLength in [4.4, 7.9], SepalWidth in [2.2, 4.1], 
-    PetalLength in [0.8, 2.4], PetalWidth in [0.1, 2.5].
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, versicolor) :-
-    SepalLength in [4.4, 7.9], SepalWidth in [2.2, 4.1], 
-    PetalLength in [2.4, 4.7], PetalWidth in [0.1, 2.5].
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, virginica) :-
-    SepalLength in [4.4, 7.9], SepalWidth in [2.2, 4.1], 
-    PetalLength in [4.7, 6.9], PetalWidth in [0.1, 2.5].
-\end{lstlisting}
+\lstinputlisting[language=Prolog]{listings/iris-rules-iter.pl}
 %
 The input space partitioning induced by the extracted rules is shown in \Cref{fig:iter}.
 
 \subsection{\gridex{}}
 
-\input{tab-gridex}
+\input{tables/tab-gridex}
 
 Finally, as last step of our experiments the \gridex{} extractor has been applied to the 9-NN.
 %
@@ -718,14 +702,7 @@ Input feature relevance is always scaled in the [0, 1] interval.
 %
 Corresponding output Prolog theory and input space partitioning are reported in the following and in \Cref{fig:gridex}, respectively.
 
-\begin{lstlisting}[language=Prolog]
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, setosa) :-
-    PetalLength in [0.8, 2.2].
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, versicolor) :-
-    PetalLength in [2.6, 4.8].
-iris(SepalLength, SepalWidth, PetalLength, PetalWidth, virginica) :-
-    PetalLength in [4.8, 6.9].
-\end{lstlisting}
+\lstinputlisting[language=Prolog]{listings/iris-rules-gridex.pl}
 
 Also in this case only one input feature is considered to draw predictions.
 %
