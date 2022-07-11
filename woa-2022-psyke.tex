@@ -82,89 +82,120 @@ We also report as a concrete example the implementation of the proposed generali
 
 \section{Introduction}
 
-Many everyday tasks are currently carried out mainly via machine learning (ML) models~\cite{rocha2012far}.
-%
-Their increasing ubiquity descends from the impressive predictive performance they exhibit when used to support decision making in a wide variety of application fields, for instance customer profiling, financial forecasting, speech and image recognition, etc.
-%
-These data-driven predictors are trained upon a given amount of input instances, used to tune their internal parameters with the objective of minimising a predefined loss function w.r.t.\ training data.
-%
-Since the acquired knowledge is sub-symbolically stored in the form of parameter values, they are not directly interpretable from the human perspective, so the term \emph{black box} (BB) is used to refer these \emph{opaque} ML predictors.
-%
-Despite the lacking of human interpretability, BB models are anyway adopted thanks to their performance.
+% Many everyday tasks are currently carried out mainly via machine learning (ML) models~\cite{rocha2012far}.
+% %
+% Their increasing ubiquity descends from the impressive predictive performance they exhibit when used to support decision making in a wide variety of application fields, for instance customer profiling, financial forecasting, speech and image recognition, etc.
+% %
+% These data-driven predictors are trained upon a given amount of input instances, used to tune their internal parameters with the objective of minimising a predefined loss function w.r.t.\ training data.
+% %
+% Since the acquired knowledge is sub-symbolically stored in the form of parameter values, they are not directly interpretable from the human perspective, so the term \emph{black box} (BB) is used to refer these \emph{opaque} ML predictors.
+% %
+% Despite the lacking of human interpretability, BB models are anyway adopted thanks to their performance.
 
-There exist, however, critical applications areas -- highly impacting, for instance, in finance, law, healthcare or other domains involving human health and wealth -- where humans beings must be capable of understanding and explaining the obtained predictions, or else discard them as unacceptable.
-%
-Several methodologies have been proposed by the explainable artificial intelligence community to overcome the issues deriving from the lack of explainability~\cite{guidotti2018survey}.
-%
-The first consists of uniquely relying on \emph{interpretable} predictors~\cite{Rudin2019}, as, for instance, generalised linear models and decision trees, in order to obtain trained models explainable by construction.
-%
-This solution may bring negative repercussions on the overall predictive performance of the model, since it excludes some of the most promising ML algorithms, as artificial neural networks.
-%
-Another strategy is the reverse-engineering of the BB inner operation to derive \emph{post-hoc} explanations~\cite{KENNY2021103459}, for example via symbolic knowledge extraction (SKE).
-%
-This second solution allow data scientists to associate human-comprehensible knowledge to outputs given by prediction-effective, but opaque, algorithms.
-%
-The focus of this paper is on the latter strategy.
+% There exist, however, critical applications areas -- highly impacting, for instance, in finance, law, healthcare or other domains involving human health and wealth -- where humans beings must be capable of understanding and explaining the obtained predictions, or else discard them as unacceptable.
+% %
+% Several methodologies have been proposed by the explainable artificial intelligence community to overcome the issues deriving from the lack of explainability~\cite{guidotti2018survey}.
+% %
+% The first consists of uniquely relying on \emph{interpretable} predictors~\cite{Rudin2019}, as, for instance, generalised linear models and decision trees, in order to obtain trained models explainable by construction.
+% %
+% This solution may bring negative repercussions on the overall predictive performance of the model, since it excludes some of the most promising ML algorithms, as artificial neural networks.
+% %
+% Another strategy is the reverse-engineering of the BB inner operation to derive \emph{post-hoc} explanations~\cite{KENNY2021103459}, for example via symbolic knowledge extraction (SKE).
+% %
+% This second solution allow data scientists to associate human-comprehensible knowledge to outputs given by prediction-effective, but opaque, algorithms.
+% %
+% The focus of this paper is on the latter strategy.
 
-The basic idea behind SKE is to construct a \emph{symbolic} model mimicking the behaviour of a BB predictor in terms of outputs corresponding to given inputs.
+Symbolic knowledge extracion (SKE) is a powerful tool within the scope of eXplainable Artificial Intelligence (XAI).
 %
-Symbols may consist of intelligible knowledge, e.g., lists or trees of \emph{logic rules} that can be exploited to obtain predictions as well as to better understand the underlying predictor.
+It enables reverse-engineering of the black-box machine learning algorithms---which are nowadays exploited in many AI tasks~\cite{rocha2012far}.
+%
+Thanks to SKE, data scientists can associate human-comprehensible, \emph{post-hoc} explanations~\cite{KENNY2021103459} to the recommendations or decisions computed by most common prediction-effective -- yet, poorly interpretable -- algorithms.
 %
 To cite some examples, SKE is widely adopted to credit-risk evaluation \cite{baesens2003using,baesens2001building,steiner2006using}, medical diagnosis -- i.e., to make early breast cancer prognosis predictions \cite{franco2007early} and for recognising hepatobiliary disorders \cite{hayashi2000comparison} or other diseases and dysfunctions \cite{bologna1997three} --, credit card screening \cite{setiono2011rule}, intrusion detection systems \cite{hofmann2003rule}, and keyword extraction \cite{azcarraga2012keyword}.
-%
-Even though a great variety of SKE techniques is available in the literature, it is often a quite complex task to select a cluster of suitable algorithms for a certain necessity and, amongst them, to find the best algorithm.
-%
-This difficulty depends on the intrinsic constraints of each extraction procedure, for instance regarding the task to address (classification or regression), the input features (continuous, categorical, binary) and the underlying BB nature and architecture.
-%
-The latter can be bypassed by adopting \emph{pedagogical} extractors, working upon any kind of BB without taking into consideration its kind (e.g., if it is a neural network, a support-vector machine or a random forest predictor), nor its internal architecture (e.g., number of layers and neurons in neural networks).
-%
-As for the input features, they can be mapped from one category to another by performing some manipulations.
-%
-Algorithms accepting numerical continuous features also work with numerical discrete and binary inputs.
-%
-Categorical features may be easily converted into numerical by an enumeration.
-%
-On the other hand, algorithms designed to accept discrete features obviously accept binary features too, and they may work on continuous data if they are previously transformed, e.g., via discretisation.
-%
-Finally, any kind of feature can be traced back to binary values by applying one-hot encoding to discrete (or discretised) features.
-%
-By taking in considerations all these observations, it is possible to consider as overcame issues related to the nature of input features.
-%
-A different situation describe the kind of the task at hand.
-%
-The majority of existing SKE techniques are exclusively designed for supervised classification (e.g.,~\cite{craven1994using,craven1996extracting}) or regression (e.g.,~\cite{huysmans2006iter,gridex-extraamas2021}).
-%
-Only few exceptions may be applied to both of them, as \cart{}~\cite{breiman1984classification}.
-%
-The inability to switch from a task to another comes with two major disadvantages for users:
-%
-\begin{inlinelist}
-	\item the need to implement/learn how to tune a larger number of algorithms, since they are not general-purpose, and
-	\item the impossibility to assess the performance of a (new) procedure over a wide range of test applications.
-\end{inlinelist}
 
-In this paper we propose a generalisation of SKE techniques designed for regression tasks, aimed at extending the application of algorithms
+The basic idea behind SKE is to construct \emph{symbolic} (hence, interpretable) models mimicking the behaviour of the pre-existing black-box predictors to be explained.
 %
-\begin{inlinelist}
-	\item based on aggregate computations (e.g., averaging output values), and
-	\item adopting similarity-based criteria between input training data or output predictions (usually w.r.t.\ a user-defined threshold).
-\end{inlinelist}
+Such symbolic models should describe the corresponding black boxes in terms of the outputs they provide as responses to (classes of) inputs values.
 %
-Under this perspective, \iter{}~\cite{huysmans2006iter} and \gridex{}~\cite{gridex-extraamas2021} are perfect examples.
+Symbols, in particular, may consist of intelligible knowledge, e.g., lists or trees of \emph{logic rules} that can be exploited to obtain predictions as well as to better understand the underlying predictor.
 %
-Thus, we demonstrate the effectiveness of our proposal by extending their implementation in the \psyke{} framework~\cite{psyke-woa2021,psyke-ia2022,psyke-extraamas2022}, a platform combining SKE and Semantic Web to provide human-interpretability and intelligent agent-interoperability for BB-based machine learning tasks.
+In other words, symbols are both human- and machine-interpretable.
+
+Because of the many SKE techniques available in the literature, selecting the most appropriate SKE algorithm for any given learning task, may easily become cumbersome.
 %
-Finally, we push forward our considerations to overcome another limitation of SKE techniques for regression, that is the constant output value provided by many of them, introducing an undesired discretisation of the predictions and thus a possible worsening of the predictive performance.
+Difficulties may arise because of the intrinsic design choices behind each extraction algorithm.
 %
-We show that it is possible to obtain better results by generalising these algorithms according to our method in order to obtain outputs in the form of linear combination of the input variables.
+In fact, SKE algorithms may commonly target specific learning tasks (classification or regression), specific sorts of ML predictors (e.g. neural networks, SVM, linear models, etc.), or specific sorts of training data (e.g. continuous, categorical, or binary).
+%
+% The latter can be bypassed by adopting \emph{pedagogical} extractors, working upon any kind of BB without taking into consideration its kind (e.g., if it is a neural network, a support-vector machine or a random forest predictor), nor its internal architecture (e.g., number of layers and neurons in neural networks).
+% %
+% As for the input features, they can be mapped from one category to another by performing some manipulations.
+% %
+% Algorithms accepting numerical continuous features also work with numerical discrete and binary inputs.
+% %
+% Categorical features may be easily converted into numerical by an enumeration.
+% %
+% On the other hand, algorithms designed to accept discrete features obviously accept binary features too, and they may work on continuous data if they are previously transformed, e.g., via discretisation.
+% %
+% Finally, any kind of feature can be traced back to binary values by applying one-hot encoding to discrete (or discretised) features.
+% %
+% By taking in considerations all these observations, it is possible to consider as overcame issues related to the nature of input features.
+% %
+% A different situation describe the kind of the task at hand.
+%
+% The majority of existing SKE techniques are exclusively designed for supervised classification (e.g.,~\cite{craven1994using,craven1996extracting}) or regression (e.g.,~\cite{huysmans2006iter,gridex-extraamas2021}).
+% %
+% Only few exceptions may be applied to both of them, as \cart{}~\cite{breiman1984classification}.
+% %
+% The inability to switch from a task to another comes with two major disadvantages for users:
+% %
+% \begin{inlinelist}
+% 	\item the need to implement/learn how to tune a larger number of algorithms, since they are not general-purpose, and
+% 	\item the impossibility to assess the performance of a (new) procedure over a wide range of test applications.
+% \end{inlinelist}
+
+In this paper, we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
+%
+Methods of such sort extract symbolic knowledge by querying black-box predictors as oracles, and by recursively partitioning the input spaces of these black boxes into several hyper-cubes---hence following a divide-et-impera approach.
+%
+Despite being commonly considered regression-specific, we show that hypercube-based SKE methods are flexible enough to deal with classification problems as well.
+%
+More generally, we propose a common metamodel for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
+
+Accordingly, the contribution of this paper is manifold.
+%
+First, we provide a general and abstract description of any hypercube-based SKE workflow.
+%
+Second, we compare existing hypercube-based methods (e.g. \iter{}~\cite{huysmans2006iter} and \gridex{}~\cite{gridex-extraamas2021}) w.r.t. to the way they partition the input space, approximate black-box decisions, and construct the extracted symbolic knowledge.
+%
+Third, we discuss how hypercube-based methods can be engineered to provide full support to supervised learning tasks---there including regression and classification ones.
+%
+Finally, to 
+%
+% In this paper we propose a generalisation of SKE techniques designed for regression tasks, aimed at extending the application of algorithms
+% %
+% \begin{inlinelist}
+% 	\item based on aggregate computations (e.g., averaging output values), and
+% 	\item adopting similarity-based criteria between input training data or output predictions (usually w.r.t.\ a user-defined threshold).
+% \end{inlinelist}
+% %
+% Under this perspective, \iter{}~\cite{huysmans2006iter} and \gridex{}~\cite{gridex-extraamas2021} are perfect examples.
+% %
+% Thus, we 
+demonstrate the versatility of hypercube-based methods, we analyse disparate SKE scenarios via the \psyke{} framework~\cite{psyke-woa2021,psyke-ia2022,psyke-extraamas2022}---that is, a platform combining SKE and Semantic Web to provide human-interpretability and intelligent agent-interoperability for BB-based machine learning tasks.
+%
+% Finally, we push forward our considerations to overcome another limitation of SKE techniques for regression, that is the constant output value provided by many of them, introducing an undesired discretisation of the predictions and thus a possible worsening of the predictive performance.
+%
+% We show that it is possible to obtain better results by generalising these algorithms according to our method in order to obtain outputs in the form of linear combination of the input variables.
 
 Accordingly, the remainder of this paper is organised as follows.
 %
 \Cref{sec:state} describes the state of the art for SKE as well as some background notion to fully understand the work.
 %
-\Cref{sec:contribution} presents our generalisation, that is exemplified in \Cref{sec:experiments}.
+\Cref{sec:contribution} presents our meta-model for hypercube-based methods and compares most relevant methods from the litterature, which are then exemplified in \Cref{sec:experiments}.
 %
-Conclusions are drawn in \Cref{sec:conclusions}.
+Finally, conclusions are drawn in \Cref{sec:conclusions}.
 
 \section{State of the Art}\label{sec:state}
 
