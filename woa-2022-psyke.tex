@@ -82,7 +82,7 @@ We also report as a concrete example the implementation of the proposed generali
 
 \section{Introduction}
 
-\gcnote{Leggete la nuova intro \& abstract. Se vi piace ristrutturiamo il paper, se no rollbackiamo e teniamo la versione di fede.}
+% \gcnote{Leggete la nuova intro \& abstract. Se vi piace ristrutturiamo il paper, se no rollbackiamo e teniamo la versione di fede.}
 
 % Many everyday tasks are currently carried out mainly via machine learning (ML) models~\cite{rocha2012far}.
 % %
@@ -429,25 +429,53 @@ Input data as well may follow Semantic Web encoding, so \psyke{} extractors acce
 
 \section{Hypercube-based methods}\label{sec:contribution}
 
-In the following we provide a general description of hypercube-based extractors and then we delve into the details about different algorithms belonging to the category.
+In this section, we provide a general model of hypercube-based knowledge extractors.
+%
+We then delve into the details of different algorithms from the literature, and we discuss how they match the model.
 
 \subsection{Unified Model}
 
-The common workflow of hypercube-based SKE techniques may be roughly summarised in 3 steps, namely:
+Hypercube-base extraction methods are \emph{pedagogical} extraction procedures which can operate on trained ML predictors of any sort.
 %
-\begin{inlinelist}
-	\item the partitioning of the input feature space into hypercubic subregions, following some strategy and according to defined constraints;
-	\item the approximation of an output decision for each selected hypercubic region; and
-	\item the creation of a rule set where each rule is obtained by merging information about how regions are described and which outputs are associated to them.
-\end{inlinelist}
+They consider the predictor $P$ undergoing extraction as an oracle to be queried multiple times, in order to find a partitioning $H_1 \cup \ldots \cup H_n$ of its input space $\mathcal{X}$ such that the output space $\mathcal{Y}$ can be concisely and correctly expressed for each partition.
 %
-It is important to notice that hypercube-based extractors produce as output a predictive rule per found partition.
+Hence, they extract knowledge in the form of rule lists or trees, where each rule carries attempts to describe the outcome of $P$ in a particular hypercube $H_i \subseteq \mathcal{X}$. 
+%
+More formally: 
+%
+\[ \mathbf{x} \in H_i \rightarrow (~\mathbf{y} = f_i(\mathbf{x})~) \]  
+%
+to be read as ``if the input vector $\mathbf{x} \in \mathcal{X}$ is in some hypercube $H_i$, then the prediction $\mathbf{y} \in \mathcal{Y}$ is $f_i(\mathbf{x})$''.
+%
+Notice that each hypercube $H_i$ is a partition of the input space $\mathcal{X}$, and it comes with a function $f_i$ approximating $P$ within that hypercube.
+%
+More formally: $f_i(\mathbf{x}) \approx P(\mathbf{x}),~\forall \mathbf{x} \in H_i$.
 
-\paragraph{Input space partitioning}
-
-The input space partitioning is usually an iterative, possible recursive, elaboration, aimed at finding the optimal input region amount, shape and size w.r.t.\ some \emph{desiderata}.
+Regardless of its technical details, hypercube-based extraction procedures should then attempt to select hypercubes and local approximation functions in such a way to maximise the fidelity of the overall rule set/list w.r.t. $P$.
 %
-In particular, these \emph{desiderata} are:
+To do so, they follow a quite liner workflow, may be roughly summarised in 3 steps, namely:
+%
+\begin{enumerate}
+	\item partition the input space into disjoint hypercubes $H_1 \cup \ldots \cup H_n$, following some strategy and according to defined constraints;
+	% %
+	% \begin{itemize}
+	% 	\item e.g. one may be willing to minimise $n$ while maximising the size of each $H_i$
+	% \end{itemize}
+	\item approximate the prediction of $P$ for each hypercube $H_i$, via some function $f_i$; and
+	% %
+	% \begin{itemize}
+	% 	\item e.g. one may be willing to maximise the similarity among $P$ and $f_i$ in $H_i$
+	% \end{itemize}
+	\item create a rule set where each rule \emph{concisely} represents $H_i$ and $f_i$ to describe the behaviour of $P$ in $H_i$.
+\end{enumerate}
+%
+% It is important to notice that hypercube-based extractors produce as output a predictive rule per found partition.
+
+In the following, we delve into the details of all such phases, individually.
+
+\subsubsection{Input space partitioning}
+
+The input space partitioning is s recursive computation aimed at finding the optimal amount, shape and size of hypercubes w.r.t.\ some \emph{desiderata}, such as:
 %
 \begin{inlinelist}
 	\item covering the whole input space;
@@ -465,7 +493,7 @@ For instance, the input space coverage may be limited only to the interesting in
 %
 A region may be defined as interesting if it contains training samples, and thus it is probable to have instances belonging to it to be predicted in the future.
 %
-Alternatively, the fragmentations into sub-regions may terminate after a predefined number of iterations, as some existing algorithms actually do.
+Alternatively, the partitioning process may terminate after a predefined number of iterations, as some existing algorithms actually do.
 %
 However, this may lead to the indiscriminate exclusion of input regions that, conversely, are not negligible, resulting in the impossibility for the explainable model to provide predictions for a subset of input instances.
 
@@ -573,7 +601,7 @@ In \Cref{fig:general-error} are reported examples of predictive errors measured 
 %
 The three plots follow the same logic as \Cref{fig:general-sim}.
 
-\paragraph{Approximating decisions}
+\subsubsection{Approximating decisions}
 
 As for the approximation of output decisions associated to input regions, they are usually computed on the basis of the predictions provided by the underlying blabk box when applied to an alteration of the training data set.
 %
@@ -609,7 +637,7 @@ In \Cref{fig:general-pred} are reported examples of predictions provided by a ge
 %
 The three plots follow the same logic as \Cref{fig:general-sim}.
 
-\paragraph{Output rule creation}
+\subsubsection{Output rule creation}
 
 After having selected a set of input space regions and one of corresponding output decision, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
 %
