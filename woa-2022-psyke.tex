@@ -690,7 +690,9 @@ On the other hand, the postcondition is simply the decision calculated for the r
 
 \section{Case Study: \psyke}\label{sec:experiments}
 
-In the following, we report the effectiveness of our proposed generalisation implemented for the \iter{} and \gridex{} extraction algorithms, both designed for regression and here applied to explain a classifier.
+Here, we exemplify the effectiveness of hypercube-based methods, as implemented by the \iter{} and \gridex{} extraction algorithms.
+%
+Both such methods are designed for regression and here applied to classification tasks.
 %
 \cart{} is used as benchmark to assess the predictive performance of the modified extractors, since it is a state-of-the-art procedure directly applicable to data sets described by continuous features, without prior discretisation.
 %
@@ -753,7 +755,7 @@ Differently from \iter{} and \gridex{}, \cart{} is able to work upon discretised
 %
 Training the model with a maximum leaf amount of 3 gives the following theory, composed of 3 rules---namely, one per each possible class of the Iris data set.
 
-\lstinputlisting[language=Prolog]{listings/iris-rules-cart.pl}
+\prologimport{listings/iris-rules-cart.pl}
 
 The theory is always exhaustive, since it is always possible to find a leaf classifying an instance.
 %
@@ -785,7 +787,7 @@ The results of our experiments for \iter{} are reported in \Cref{tab:iter}.
 %
 The best predictive performance, achieved with the parameters highlighted in bold font in the Table, correspond to the following rules.
 %
-\lstinputlisting[language=Prolog]{listings/iris-rules-iter.pl}
+\prologimport{listings/iris-rules-iter.pl}
 %
 The input space partitioning induced by the extracted rules is shown in \Cref{fig:iter}.
 
@@ -820,7 +822,7 @@ Input feature relevance is always scaled in the [0, 1] interval.
 %
 Corresponding output Prolog theory and input space partitioning are reported in the following and in \Cref{fig:gridex}, respectively.
 
-\lstinputlisting[language=Prolog]{listings/iris-rules-gridex.pl}
+\prologimport{listings/iris-rules-gridex.pl}
 
 Also in this case only one input feature is considered to draw predictions.
 %
@@ -852,7 +854,7 @@ It worths noting that \gridex{} do not provide a classification rule for a small
 
 \section{Conclusions and Future Works}\label{sec:conclusions}
 
-
+\gcnote{Add something}
 
 \begin{acknowledgments}
 	This paper has been partially supported by

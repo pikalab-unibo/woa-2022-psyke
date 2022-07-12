@@ -1,7 +1,7 @@
 % !TeX root = woa-2021-psyke.tex
 \usepackage[utf8]{inputenc}
 \usepackage{cleveref}
-\usepackage{listings}
+\usepackage{code-listings}
 \usepackage[inline]{enumitem}
 \usepackage[margin=20pt]{subfig}
 % \usepackage{pifont}
@@ -34,28 +34,7 @@
 \newcommand{\rcnote}[1]{{\todo[color=magenta,inline]{\textbf{RC:} #1}}}
 \newcommand{\rctodo}[1]{{\todo[size=\tiny,color=magenta]{\textbf{RC:} #1}}}
 
-\lstset{
-	showstringspaces=false,
-	basicstyle=\small\ttfamily,
-	commentstyle={\color{olive}},
-	identifierstyle=\color{black},
-	ndkeywordstyle={\color{blue}},
-	stringstyle={\color{magenta}},
-	emphstyle={},
-	keywordstyle={\color{blue}},
-	breaklines=true,
-	numbers=left,
-	numberstyle=\tiny\color{gray},
-	numbersep=10pt,
-	tabsize=2,
-	extendedchars=true,
-	frame=trBL,
-	frameround=fttt,
-}
-
 \newcommand{\mofn}{\emph{M-of-N}}
-\newcommand{\kt}[1]{\texttt{#1}}
-\newcommand{\pl}[1]{\texttt{#1}}
 
 \newcommand{\meta}[1]{\langle#1\rangle}
 \newcommand{\var}[1]{\texttt{#1}}
