@@ -690,19 +690,17 @@ On the other hand, the postcondition is simply the decision calculated for the r
 
 \section{Case Study: \psyke}\label{sec:experiments}
 
-\gcnote{Al posto di parlare di come supportiamo la classificazione, parlerei farei esempi in cui si mostra:
-1. how regression related experiments may be re-used for classification
-2. focus on how locally-linear approximation may be exploited for regression
-3. più tutto ciò che ti sembra sensato presentare dato il discorso di cui sopra.
-}
-
-In the following we report the effectiveness of our proposed generalisation implemented for the \iter{} and \gridex{} extraction algorithms, both designed for regression and here applied to explain a classifier.
+In the following, we report the effectiveness of our proposed generalisation implemented for the \iter{} and \gridex{} extraction algorithms, both designed for regression and here applied to explain a classifier.
 %
 \cart{} is used as benchmark to assess the predictive performance of the modified extractors, since it is a state-of-the-art procedure directly applicable to data sets described by continuous features, without prior discretisation.
 %
-All the adopted implementations are included in the \psyke{} framework.\footnote{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
+All the adopted implementations are included in the \psyke{} framework\footnotemark.
 
-Experiments have been executed on the well-known Iris data set.\footnote{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}}
+\footnotetext{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
+
+Experiments are executed on the well-known Iris data set\footnotemark.
+%
+\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}}
 %
 The data set is composed of 150 instances corresponding to Iris flower individuals.
 %
@@ -710,13 +708,13 @@ Each instance is described by 4 continuous input features (i.e., petal and sepal
 %
 Three different species are present in the Iris data set (namely, Setosa, Virginica, and Versicolor) and they are equally balanced (50 individuals per species).
 
-The experiments have been carried out as follows:
+The experiments are carried out as follows:
 %
 \begin{inlinelist}
-	\item the data set have been randomly split into training and test sets, of equal size;
-	\item a $k$-nearest neighbour classifier have been selected to perform the task, with $k=4$;
-	\item three different extractors have been used to obtain human-interpretable knowledge from the BB predictions;
-	\item the predictive performance of the BB predictor and of the extractors have been graphically compared, in terms of decision boundaries, and numerically assessed, in terms of accuracy and F1 scores. For extractors, also fidelity and readability measurements have been performed.
+	\item the data set is randomly split into training and test sets, of equal size;
+	\item a $k$-nearest neighbour classifier is trained on the training set;
+	\item three different extractors are used to extract symbolic rules out of that classifier;
+	\item the predictive performance of both the classifier and the extracted rules are graphically compared -- in terms of decision boundaries --, and numerically assessed---in terms of accuracy and F1 scores. In the case of the extracted rules, fidelity and readability measurements are performed as well.
 \end{inlinelist}
 %
 It worths noticing that the training set is used only to train the models.
@@ -725,11 +723,7 @@ Conversely, the test set is used only to assess the predictive performance of pr
 %
 Both sets are constant for each experiment, to better compare the performance under the same conditions.
 %
-Fidelity of extractors w.r.t.\ the underlying BB have been assessed with the same metrics adopted for the predictive performance.
-%
-We recall that the fidelity measurements express how well an extractor is able to mimic the underlying predictor.
-%
-Conversely, predictive performance is calculated between the extractor (or predictor) outputs and the expected values of the test set.
+The fidelity of the extracted rules (w.r.t.\ the predictor they have been extracted from) is assessed as well, via the same metrics adopted for the predictive performance.
 %
 Finally, the output knowledge readability is expressed as number of extracted rules.
 
@@ -753,7 +747,7 @@ The decision boundaries of the selected 9-NN are reported in \Cref{fig:knn}.
 
 \input{tables/tab-cart}
 
-The \cart{} extractor has been applied to the 9-NN to extract human-intelligible knowledge in Prolog syntax, without discretising the input data set.
+The \cart{} extractor is applied to the 9-NN classifier to extract human-intelligible knowledge in Prolog syntax, without discretising the input data set.
 %
 Differently from \iter{} and \gridex{}, \cart{} is able to work upon discretised data sets too.
 %
@@ -773,9 +767,9 @@ In this example, only petal width and length are considered to assign class labe
 
 \input{tables/tab-iter}
 
-The \iter{} algorithm has been applied as well to explain the 9-NN.
+The \iter{} algorithm explain applied as well to explain the 9-NN classifier.
 %
-Several combinations of hyper-parameter values have been tested in order to obtain the output knowledge having the highest possible predictive performance and fidelity.
+We test several hyper-parameter values in order to attain the rule list having the highest possible predictive performance and fidelity.
 %
 \iter{} is based on the following hyper-parameters:
 %
@@ -799,9 +793,9 @@ The input space partitioning induced by the extracted rules is shown in \Cref{fi
 
 \input{tables/tab-gridex}
 
-Finally, as last step of our experiments the \gridex{} extractor has been applied to the 9-NN.
+Finally, as last step of our experiments, the \gridex{} extractor is applied to the 9-NN classifier
 %
-Also in this case different values for the hyper-parameters have been explored.
+In this case as well different values for the hyper-parameters are been explored.
 %
 We recall that fundamental hyper-parameters for \gridex{} are
 %
