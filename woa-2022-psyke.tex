@@ -202,10 +202,6 @@ Finally, conclusions are drawn in \Cref{sec:conclusions}.
 \section{State of the Art}\label{sec:state}
 
 In the following we provide details about the state of the art for symbolic knowledge extraction and the \psyke{} platform.
-%
-We focus in particular on the extraction algorithms cited in \Cref{sec:experiments} to give a practical demonstration of out methodology.
-%
-Is should be noticed that we restricted our experiments to pedagogical regression extractors inducing hypercubic partitionings of the input feature space.
 
 \subsection{Knowledge Extraction}\label{ssec:extraction}
 
@@ -295,107 +291,29 @@ Classifiers are usually evaluated via accuracy, precision, recall, and F1-score.
 %
 Conversely, common metrics for regressors are the mean absolute/squared error (MAE/MSE) and the R${^2}$ score.
 
-\subsection{Extraction algorithms}\label{ssec:algorithms}
-
-\paragraph{\iter}\label{par:iter}
-
-\iter{}~\cite{huysmans2006iter} is a pedagogical technique producing \emph{if-then} logic rules from a BB predictor and a training set.
+%\paragraph{\cart}\label{par:cart}
 %
-It assumes that all the input features are continuous, as the outputs.
-%
-The training set is usually the same adopted to train the black box.
-%
-The underlying predictor may belong to any category, since the procedure only considers its inputs and corresponding outputs.
-
-The algorithm is based on the iterative creation and expansion of hypercubes inside the input feature space, until a maximum number of iterations is reached or, otherwise, the whole input space is covered.
-%
-The expansion may terminate also if it is not possible to further expand the hypercubes.
-%
-In those cases additional cubes may be created to cover the remaining space.
-
-The extraction of knowledge is performed by associating a human-readable logic rule to each hypercube.
-%
-Output rules have the following format:
-%
-\begin{equation*}
-	\text{Output is ~} C \text{~ if ~} X_1 \in [l_1, u_1], X_2 \in [l_2, u_2], ..., X_n \in [l_n, u_n],
-\end{equation*}
-%
-where $C$ is a constant (real-valued) output and $X_1, X_2, ..., X_n$ are input variables assuming values included in the intervals described by corresponding lower-bounds $l_i$ and upper-bounds $u_i$.
-%
-Thus, the rule preconditions describe an $n$-dimensional hypercube.
-
-\iter{} performs averaging operations to associate output values to hypercubes.
-%
-Indeed, for each cube, \iter{} selects all the training samples inside it and calculates the mean prediction by using the underlying BB as an oracle.
-%
-If the training samples are not enough to satisfy the minimum amount specified by the user, extra random samples are generated and predicted together with the others.
-
-\iter{} also takes advantage of a similarity criterion to expand the hypercubes.
-%
-Indeed, at every iteration all the possible expansions around each cube are considered, but only one is performed, i.e., the one capable of expanding a cube towards the most similar input space region.
-%
-Similarity is calculated via mean absolute difference between the output values of the cubes to be expanded and the eligible cubes around them.
-
-\paragraph{\gridex{} and \gridrex{}}\label{par:gridex}
-
-\gridex~\cite{gridex-extraamas2021} is another pedagogical extraction algorithm for regressors, to be considered as an extension of \iter{} aimed at overcoming its major drawback, i.e., the non-exhaustivity of its output rules.
-%
-\gridex{} achieves this goal because it is exhaustive by design.
-%
-Both algorithms are applicable under the same circumstances regarding input features and produce lists of logic rules describing hypercubes associated to constant output values, that represent the interpretable predictions.
-%
-Differently from \iter{}, \gridex{} adopts a top-down approach to split the input feature space into hypercubes.
-%
-It iteratively partitions the \emph{whole} space according to some defined strategy, marking at each iteration if the created partitions are \emph{negligible} (i.e., they contain no training samples, so they are discarded since it is not relevant to have rules associated to them), \emph{eligible} for further partitioning (if they contain samples that are not enough \emph{similar}), or \emph{permanent} (otherwise, if they contain similar training instances and, thus, these cubes should have a good predictive performance).
-%
-Strategies to split the input space are \emph{fixed}, if the user specifies for each iterations how many partitions have to be performed along all the input dimensions, or \emph{adaptive}, if the number of splits is determined through the relevance of each input feature w.r.t.\ the output variable.
-%
-The output value of each cube is calculated as for \iter{}, so \gridex{} too is not able to produce actual regression rules.
-%
-Similarity between samples is assessed through the output value standard deviation of all the instances included inside a hypercube.
-%
-If the standard deviation is below a user-defined threshold, then the cube only contains similar samples and it is no further partitioned.
-%
-Otherwise, \gridex{} attempts to split the cube in smaller regions, possibly enclosing more similar samples.
-%
-Since the readability of the output model depends on the number of extracted rules, it is of paramount importance to keep it as low as possible.
-%
-For this reason a merging phase is performed after every splitting iteration as an optimisation to reduce the number of rules.
-%
-Indeed, adjacent cubes are pairwise merged according to a similarity criterion on the contained samples.
-%
-The merging phase is iterative: at each step are merged only the two adjacent cubes resulting in the merged hypercube having the lowest standard deviation, and it terminates when it is not possible to further merge cubes without exceeding the standard deviation user-defined threshold.
-
-On the other hand, \gridrex{}~\cite{gridrex-kr2022} is a first attempt to apply the generalisation proposed in this work to \gridex{}.
-%
-Indeed, it is able to extract fully regressive rules, having as postconditions a linear combination of the input variables.
-%
-All the other details are identical to those described for \gridex{}, but it is able to achieve better predictive performance, fidelity and readability than \gridex{}
-
-\paragraph{\cart}\label{par:cart}
-
-\cart{}~\cite{breiman1984classification} is an algorithm building decision trees for classification or regression tasks.
-%
-\cart{} is not properly a SKE procedure, but it is possible to apply it to BB predictions instead of actual data, in order to obtain an interpretable ML predictor mimicking the underling BB.
-%
-Since \cart{} produces a tree, it is straightforward to convert it into a rule tree, since each tree node corresponds to a constraint on an input variable and, consequently, each path from the root to leaves constitutes a single human-interpretable rule to perform classification or regression.
-%
-The \cart{} algorithm can be summarised as follows:
-%
-\begin{inlinelist}
-	\item initialise the root node of the tree;
-	\item find optimal splits to add nodes (internal and leaves) accordingly;
-	\item terminate the algorithm on the basis of one or more criteria---e.g., amount of rules or tree depth.
-\end{inlinelist}
-%
-Pruning techniques may be exploited after the extraction to reduce the number of leaves and, thus, of output rules.
+%\cart{}~\cite{breiman1984classification} is an algorithm building decision trees for classification or regression tasks.
+%%
+%\cart{} is not properly a SKE procedure, but it is possible to apply it to BB predictions instead of actual data, in order to obtain an interpretable ML predictor mimicking the underling BB.
+%%
+%Since \cart{} produces a tree, it is straightforward to convert it into a rule tree, since each tree node corresponds to a constraint on an input variable and, consequently, each path from the root to leaves constitutes a single human-interpretable rule to perform classification or regression.
+%%
+%The \cart{} algorithm can be summarised as follows:
+%%
+%\begin{inlinelist}
+%	\item initialise the root node of the tree;
+%	\item find optimal splits to add nodes (internal and leaves) accordingly;
+%	\item terminate the algorithm on the basis of one or more criteria---e.g., amount of rules or tree depth.
+%\end{inlinelist}
+%%
+%Pruning techniques may be exploited after the extraction to reduce the number of leaves and, thus, of output rules.
 
 \subsection{\psyke}\label{ssec:psyke}
 
 \begin{figure}
 \centering
-	\includegraphics[width=\linewidth]{figures/Psyke.pdf}
+	\includegraphics[width=.9\linewidth]{figures/Psyke.pdf}
 	\caption{\psyke{} design.}
 	\label{fig:psyke-design}
 \end{figure}
@@ -577,7 +495,7 @@ In other words, $H_1$ and $H_2$ are output-similar if it is possible to
 
 For example, in \Cref{fig:general-sim} we report examples of similarity assessments calculated for a generalised extractor applied to a classification task (\Cref{fig:gs1}) and to a regression task (\Cref{fig:gs2,fig:gs3}).
 %
-Figures concerning the regression task represent constant and non-constant outputs, respectively.
+Figures concerning the regression task represent constant and non-constant extractor outputs, respectively.
 %
 The example assumes a 2-dimensional data set with continuous input features both ranging in the interval [0, 5].
 %
@@ -609,12 +527,14 @@ where $\text{mae}(R, D)$ and $\text{accuracy}(R, D)$ are the mean absolute error
 
 \input{figures/fig-gen-err.tex}
 
-In \Cref{fig:general-error} we report some examples of predictive errors measured for a generalised extractor.
+In \Cref{fig:general-error} we report some examples of predictive errors measured for a generalised extractor by assuming a 2-dimensional data set with continuous input features both ranging in the [0, 5] interval.
 %
-The three plots follow the same logic as \Cref{fig:general-sim}.
+\Cref{fig:ge1,fig:ge2,fig:ge3} represent a classification task and two regression tasks, respectively.
 %
-\gcnote{Preferirei che spiegassi l'immagine}
-
+The first regression task is approximated by the extractor with constant outputs, whereas the second is associated to non-constant outputs.
+%
+The predictive error is reported as misclassifications in the first case and absolute error in the others.
+ 
 \subsubsection{Approximating predictions}
 
 As for the approximation of output predictions associated with each hypercube, they are usually computed on the basis of the predictions provided by the underlying black box when applied to an \emph{extended} training set.
@@ -661,32 +581,93 @@ Again, which option is better really depends on the learning task the underlying
 
 In \Cref{fig:general-pred}, we report examples of predictions provided by a generalised extractor.
 %
-The three plots follow the same logic as \Cref{fig:general-sim}.
+As for the previous examples, a 2-dimensional data set with continuous input features both ranging in the [0, 5] interval is assumed.
 %
-\gcnote{Preferirei che spiegassi l'immagine}
+\Cref{fig:gp1,fig:gp2,fig:gp3} show a classification task and two regression tasks, respectively, where the former regression task is approximated by the extractor with constant outputs.
+%
+The background colour represents the output provided by the extractor.
 
-\subsubsection{Output rule creation}
+\subsubsection{Output rule creation}\label{ssec:rule}
 
-After selecting a set of input space regions, and one output decision for each of them, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
+After selecting a set of input space regions and one output decision for each of them, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
 %
 The precondition is a formal description of a single input region in terms of individual features, for instance by means of value inclusion inside an interval.
 %
-Hypercubic $d$-dimensional regions may be described through the conjunction of (at most) $d$ interval inclusion conditions.
+Hypercubic $n$-dimensional regions may be described through the conjunction of (at most) $n$ interval inclusion conditions.
 %
 On the other hand, the postcondition is simply the decision calculated for the region on the basis of the task at hand, as previously described.
-
-\gcnote{Un esempio ci starebbe bene}
+%
+Thus, extracted human-readable logic rules generally have the following format:
+%
+\begin{equation*}
+	\text{Output is ~} C \text{~ if ~} X_1 \in [l_1, u_1], X_2 \in [l_2, u_2], ..., X_n \in [l_n, u_n],
+\end{equation*}
+%
+where $O$ is the output decision and $X_1, X_2, ..., X_n$ are input variables assuming values included in the intervals described by corresponding lower-bounds $l_i$ and upper-bounds $u_i$.
 
 \subsection{Comparison of Existing Methods}
 
-\gcnote{Fuffa un po' e riempi fin dove arrivi, domani penso al resto}
+In the following a comparison between the hypercube-based SKE algorithms cited in \Cref{sec:experiments} -- namely \iter{} and \gridex{} -- is provided to give a practical demonstration of our methodology.
+%
+Differences in the input space partitioning and in the decision approximation are highlighted in particular.
+%
+Output rules are lists of logic rules in both cases, following the convention described in \Cref{ssec:rule}.
+%
+It worths noting that both algorithms assume input features to be continuous and may be applied to any kind of BB predictor, being pedagogical SKE methods.
 
-1. How algorithms partition the input space
+\paragraph{\iter}
 
-2. Different ways for approximating decisions
-    + How algorithms approximate decisions
+The \iter{} algorithm~\cite{huysmans2006iter} is based on the iterative creation and expansion of hypercubes inside the input feature space, until a maximum number of iterations is reached or, otherwise, the whole input space is covered.
+%
+The expansion may terminate also if it is not possible to further expand the hypercubes.
+%
+In those cases additional cubes may be created to cover the remaining space.
 
-3. How algorithms construct rules
+\iter{} has been designed limitedly to regression tasks and it performs averaging operations to associate output values to hypercubes.
+%
+Indeed, for each cube, \iter{} selects all the training samples inside it and calculates the mean prediction by using the underlying BB as an oracle.
+%
+If the training samples are not enough to satisfy the minimum amount specified by the user, extra random samples are generated and predicted together with the others.
+
+\iter{} also takes advantage of a similarity criterion to expand the hypercubes.
+%
+In particular, at every iteration all the possible expansions around each cube are considered, but only one is performed, i.e., the one capable of expanding a cube towards the most similar input space region.
+%
+Similarity is calculated via mean absolute difference between the output values of the cubes to be expanded and the eligible cubes around them.
+
+\paragraph{\gridex{}}
+
+The \gridex algorithm~\cite{gridex-extraamas2021} may be considered as an extension of \iter{} aimed at overcoming its major drawback, i.e., the non-exhaustivity of its output rules.
+%
+\gridex{} achieves this goal because it is exhaustive by design.
+%
+Differently from \iter{}, \gridex{} adopts a top-down approach to split the input feature space into hypercubes.
+%
+It iteratively partitions the \emph{whole} space according to some defined strategy, marking at each iteration if the created partitions are \emph{negligible} (i.e., they contain no training samples, so they are discarded since it is not relevant to have rules associated to them), \emph{eligible} for further partitioning (if they contain samples that are not enough \emph{similar}), or \emph{permanent} (otherwise, if they contain similar training instances and, thus, these cubes should have a good predictive performance).
+%
+Strategies to split the input space are \emph{fixed}, if the user specifies for each iterations how many partitions have to be performed along all the input dimensions, or \emph{adaptive}, if the number of splits is determined through the relevance of each input feature w.r.t.\ the output variable.
+%
+Since \gridex{} has been designed exclusively for regression tasks, as \iter{}, also in this case output decisions are calculated via local averaging calculations and actual regression rules are not supported.
+
+Similarity between samples is assessed through the output value standard deviation of all the instances included inside a hypercube.
+%
+If the standard deviation is below a user-defined threshold, then the cube only contains similar samples and it is no further partitioned.
+%
+Otherwise, \gridex{} attempts to split the cube in smaller regions, possibly enclosing more similar samples.
+%
+Since the readability of the output model depends on the number of extracted rules, it is of paramount importance to keep it as low as possible.
+%
+For this reason a merging phase is performed after every splitting iteration as an optimisation to reduce the number of rules.
+%
+Indeed, adjacent cubes are pairwise merged according to a similarity criterion on the contained samples.
+%
+The merging phase is iterative: at each step are merged only the two adjacent cubes resulting in the merged hypercube having the lowest standard deviation, and it terminates when it is not possible to further merge cubes without exceeding the standard deviation user-defined threshold.
+
+A first attempt to apply the generalisation proposed in this work to \gridex{}, in order to support regression rules as output decisions, can be found in the \gridrex{}~\cite{gridrex-kr2022} algorithm.
+%
+Indeed, it is able to extract fully regressive rules, having as postconditions a linear combination of the input variables.
+%
+All the other details are identical to those described for \gridex{}, but it is able to achieve better predictive performance, fidelity and readability than \gridex{}
 
 \section{Case Study: \psyke}\label{sec:experiments}
 
@@ -852,9 +833,15 @@ A similar reasoning may be performed about the extractors' fidelity, equal to 0.
 
 It worths noting that \gridex{} do not provide a classification rule for a small input space region, since it finds that region as negligible (because there are not data set instances belonging to it).
 
-\section{Conclusions and Future Works}\label{sec:conclusions}
+\section{Conclusions}\label{sec:conclusions}
 
-\gcnote{Add something}
+In this paper we generalise a class of SKE techniques, namely hypercube-based methods, to make them suitable for classification tasks as well as regression tasks.
+%
+We do so by proposing a common metamodel for these methods and by concretely implementing our generalisation in the \psyke{} framework.
+%
+The proposed metamodel considers in which ways it is possible to relax algorithmic patterns currently adopted by hypercube-based SKE extractors in order to widen their applicability scopes.
+%
+Our future works will be focused on extending the proposed generalisation to a wider class of SKE techniques, to enable a higher degree of usability for SKE techniques existing in the literature.
 
 \begin{acknowledgments}
 	This paper has been partially supported by
