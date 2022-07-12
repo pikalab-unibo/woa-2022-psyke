@@ -475,7 +475,7 @@ In the following, we delve into the details of all such phases, individually.
 
 \subsubsection{Input space partitioning}
 
-The input space partitioning is s recursive computation aimed at finding the optimal amount, shape and size of hypercubes w.r.t.\ some \emph{desiderata}, such as:
+Input space partitioning is a recursive computation aimed at finding the optimal amount, shape and size of hypercubes w.r.t.\ some \emph{desiderata}, such as:
 %
 \begin{inlinelist}
 	\item covering the whole input space;
@@ -489,163 +489,193 @@ It is not possible to satisfy all these conditions at once, especially when deal
 %
 For this reason, some requirements may be relaxed.
 %
-For instance, the input space coverage may be limited only to the interesting input regions, neglecting the others.
+For instance, the input space coverage may be limited only to \emph{interesting} hypercubes, neglecting the others.
 %
-A region may be defined as interesting if it contains training samples, and thus it is probable to have instances belonging to it to be predicted in the future.
-%
+A hypercube is considered as `interesting' if it contains training samples, as it may have a role to play in drawing future predictions.
+
 Alternatively, the partitioning process may terminate after a predefined number of iterations, as some existing algorithms actually do.
 %
-However, this may lead to the indiscriminate exclusion of input regions that, conversely, are not negligible, resulting in the impossibility for the explainable model to provide predictions for a subset of input instances.
-
-Disjoint regions may be relaxed into hierarchical or fuzzy regions, possibly mapped into non-overlapping rules, in order to have unambiguous output predictions.
-
-The amount of found regions, strictly tied with the interpretable model readability (since this property decreases by increasing the number of regions), is usually controlled by the remaining conditions regarding similarity and predictive error, that in turn are usually inversely proportional between each other.
+However, this may lead to the indiscriminate exclusion of some regions of the input space that, conversely, are not negligible.
 %
-The capability of grouping together similar samples enable the creation of aggregate rules that capture well the average behaviour of instances belonging to the same region.
-%
-This corresponds to local rules having low predictive errors.
-%
-The following paragraphs explain in more details how to assess instance similarity and subregion predictive error for different possible scenarios.
+This may result in the impossibility for the explainable model to provide predictions for a subset of input instances.
 
-\paragraph{Similarity amongst instances}
+Non-contiguous hypercubes may be relaxed into hierarchical or fuzzy regions, possibly mapped into non-overlapping rules, in order to have unambiguous output predictions.
 
-Subregions of the input feature space may be considered similar according to the following definitions:
+\paragraph{Similarity and fidelity}
+
+The amount of the hypercubes an input space is partitioned into may greatly impact the interpretability of the final symbolic model.
+%
+In fact, hypercube-based methods will output as many rules as the hypercubes they have partitioned the input space into---and of course more (or more complex) rules implies lower readability for the human reader.
+
+Along this line, the capability of grouping together similar samples into a single hypercube is quintessential to support the creation of few, general, and simple rules %that capture well the average behaviour of instances belonging to the same region.
+which capture the behaviour of the original predictor with high fidelity.
+%
+This corresponds to
+%
+\begin{inlinelist}
+	\item data points from the same hypercube drawing \emph{similar} predictions, and to
+	\item those predictions having a high \emph{fidelity} (or, equivalently, low error rates) w.r.t. to the predictor undergoing extraction.
+\end{inlinelist}
+%
+Accordingly, here we delve into the details of how 
+%
+\begin{inlinelist}
+	\item similarity amongst data points from \emph{contiguous} hypercubes, as well as
+	\item predictive errors amongst a candidate rule and the underlying predictor
+\end{inlinelist}
+%
+can be assessed in many different scenarios.
+
+\subparagraph{Similarity amongst instances}
+
+Partitions of an input space may be considered similar according to the following definitions:
 %
 \begin{description}
 	\item[input closeness] if the input variables of both subregions have values ranging in similar domains, as for the case of adjacent disjoint or overlapping regions;
-	\item [output closeness] if the output associated to the instances in the 2 subregions may be defined similar.
+	\item[output closeness] if the output associated to the instances in the 2 subregions may be defined similar.
 \end{description}
 %
-While it is straightforward to check input closeness (e.g., through Euclidean distance), the same cannot be stated for the output closeness, which depends on the task at hand.
-%
-The simplest case is for classification, since two subregions $d_1$ and $d_2$ satisfy output closeness if a predictor $P$ provides as most frequent output the same label for both subregions:
-%
-\begin{equation}
-	sim(P, d_1, d_2) = 
-	\begin{cases}
-		True \text{~~~~~~if~} mode(P(d_1)) = mode(P(d_2))\\
-		False \text{~~~~~otherwise}.\\
-	\end{cases}\,\label{eq:simClass}
-\end{equation}
+While it is straightforward to check input closeness (e.g., through Euclidean distance), dealing output closeness requires taking into account the learning problem at hand.
 
-In the case of regression with constant outputs, similarity may be expressed as a function of the absolute difference between the mean output predictions performed by the predictor $P$ on the two subregions $d_1$ and $d_2$:
+As far as classification is concerned, we may consider two hyper-cubes $H_1$ and $H_2$ as \emph{output-close} w.r.t. a predictor $P$ if (and only if) the most frequent output class is the same in both hypercubes.
 %
-\begin{equation}
-	sim(P, d_1, d_2) = 
-	\begin{cases}
-		True \text{~~~~~~if~} |\overline{P(d_1)} - \overline{P(d_2)}| < \theta\\
-		False \text{~~~~~otherwise},\\
-	\end{cases}\,\label{eq:simRegK}
+More formally:
+%
+\begin{equation}\label{eq:simClass}
+	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mode}(P(H_1)) = \text{mode}(P(H_2))\,
+\end{equation}
+%
+where, by $\text{mode}(\cdot)$ we denote the statistical operator returning the most frequent item over in a set, and $P(H)$ is a notational abuse for $\{ P(\textbf{x}) : \textbf{x} \in H \}$.
+
+Conversely, in the case of regression with constant outputs, output-similarity may be expressed as a function of the absolute difference between the mean output predictions performed by the predictor $P$ on the two hypercubes $H_1$ and $H_2$:
+%
+\begin{equation}\label{eq:simRegK}
+	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow |\text{mean}(P(H_1)) - \text{mean}(P(H_2))| < \theta\,
 \end{equation}
 %
 where $\theta$ is a parameter defining the strictness of the similarity criterion.
 
-Of course, this metrics is not suitable to recognise regions dominated by regression laws, since they may assume very different output values simply by changing (some of) the inputs.
+Of course, this definition \ref{eq:simRegK} is not suitable to capture the similarity amongst hypercubes characterised by a high variability of $P$.
 %
-In this case a more complex solution is required.
+In this case a more complex solution is required:
 %
-We propose the following metrics:
-\begin{equation}
-	sim(P, d_1, d_2) = 
-	\begin{cases}
-		True \text{~~~~~~if~} e(f, d_1 \cup d_2) <= 0.5 (e(f_1, d_1) + e(f_2, d_2))\\
-		False \text{~~~~~otherwise,}\\
-	\end{cases}\,\label{eq:simRegLin}
+\begin{equation}\label{eq:simRegLin}
+	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mae}(f_{1,2}, H_1 \cup H_2) \leq (\text{mae}(f_1, H_1) + \text{mae}(f_2, H_2)) / 2 \,
 \end{equation}
-where $e(f, d)$ is the mean absolute error of the linear function $f$ in approximating the input/output relationship for data instances in $d$.
 %
-The semantics of \Cref{eq:simRegLin} is the following: $d_1$ and $d_2$ are similar if
+where $\text{mae}(f, H)$ is the mean absolute error of the linear function $f$ in approximating the input/output relationship for data instances in $H$.
+%
+In other words, $H_1$ and $H_2$ are output-similar if it is possible to
+%
 \begin{inlinelist}
-	\item it is possible to merge the two regions,
-	\item to find a linear combination of the input variables representing the input/output relationship of the merged region, and
-	\item to have a performance for the found linear combination that is not worse than the average performance of the linear functions $f_1, f_2$ associated to the corresponding separated subregions.
+	\item merge the two hyper-cubes, and to
+	\item find a linear combination of the input variables representing the input/output relationship of the merged region, and
+	\item the predictive performance of such linear combination is better than the average performance of the linear functions $f_1, f_2$ associated to the corresponding separated subregions.
 \end{inlinelist}
 
 \input{figures/fig-gen-sim.tex}
 
-In \Cref{fig:general-sim} are reported examples of similarity assessments calculated for a generalised extractor applied to a classification task (\Cref{fig:gs1}) and to a regression task (\Cref{fig:gs2,fig:gs3}).
+For example, in \Cref{fig:general-sim} we report examples of similarity assessments calculated for a generalised extractor applied to a classification task (\Cref{fig:gs1}) and to a regression task (\Cref{fig:gs2,fig:gs3}).
 %
 Figures concerning the regression task represent constant and non-constant outputs, respectively.
 %
 The example assumes a 2-dimensional data set with continuous input features both ranging in the interval [0, 5].
 %
-In the Figures cubes to be expanded/merged are those having coloured background.
+In the figures, hypercubes to be expanded/merged are those having coloured background.
 %
-Possible adjacent cubes to be joined to them are represented as cubes having no background.
+Possible adjacent hypercubes to be joined to them are represented as hypercubes having no background.
 %
-Adjacent cubes that are similar to the cube to be expanded are represented with hatched background.
+Adjacent hypercubes that are similar to the hypercubes to be expanded are represented with hatched background.
 %
 It worths noting that for the example depicted in \Cref{fig:gs2} a similarity threshold $\theta$ equal to 5.0 has been chosen.
 %
 In \Cref{fig:gs3} the predictive errors corresponding to the adjacent hypercubes as well as the calculated errors of the possible merged regions are omitted to keep the image clearer.
 
-\paragraph{Predictive error assessment}
+\subparagraph{Predictive error assessment}
 
-A generalised metrics is necessary to assess the predictive performance of a rule or set of rules for both classifications and regressions.
+A generalised metrics is necessary to assess the predictive performance of a set of rules for both classifications and regressions.
 %
-We propose as error function for an extractor $E$ applied to a data set $D$ the following:
+We propose as error function for a rule set $R$ applied to a data set $D$ the following:
 %
-\begin{equation}
-	err(E, D) = 
+\begin{equation}\label{eq:error}
+	\text{error}(R, D) = 
 	\begin{cases}
-		mae(E, D) \text{~~~~~~~~~~~(regression)}\\
-		1 - acc(E, D) \text{~~~~~~(classification),}\\
-	\end{cases}\,\label{eq:error}
+		\text{mae}(R, D) & \text{(regression)}\\
+		1 - \text{accuracy}(R, D) & \text{(classification)}\\
+	\end{cases}\,
 \end{equation}
 %
-where $mae(E, D)$ and $acc(E, D)$ are the mean absolute error and the classification accuracy score, respectively, calculated on the output predictions obtained via the rules extracted by $E$ for the data set $D$ w.r.t.\ the expected outputs for $D$.
+where $\text{mae}(R, D)$ and $\text{accuracy}(R, D)$ are the mean absolute error and the classification accuracy score, respectively, calculated on the output predictions obtained via the rules in $R$, for the data set $D$, and w.r.t.\ the expected outputs for $D$.
 
 \input{figures/fig-gen-err.tex}
 
-In \Cref{fig:general-error} are reported examples of predictive errors measured for a generalised extractor.
+In \Cref{fig:general-error} we report some examples of predictive errors measured for a generalised extractor.
 %
 The three plots follow the same logic as \Cref{fig:general-sim}.
+%
+\gcnote{Preferirei che spiegassi l'immagine}
 
-\subsubsection{Approximating decisions}
+\subsubsection{Approximating predictions}
 
-As for the approximation of output decisions associated to input regions, they are usually computed on the basis of the predictions provided by the underlying blabk box when applied to an alteration of the training data set.
+As for the approximation of output predictions associated with each hypercube, they are usually computed on the basis of the predictions provided by the underlying black box when applied to an \emph{extended} training set.
 %
-The altered data set may be the training data set itself or a subset of it.
+The extended training set may consist of the original data the predictor has been trained upon -- or a subset of it --, possibly augmented with some further data.
 %
-In both cases, data augmentation through the creation of random input samples is allowed to retain higher predictive performance, by assuming that the predictor is used as an oracle to predict also the additional data.
+Data augmentation via random input samples is useful to attain higher predictive performance, provided that the predictor is used as an oracle to compute the corresponding expected outputs.
 
-Extractors based on hypercubic partitioning of the input feature space are usually applied to explain BB regressors.
+Provided that the input space has been adequately partitioned into several hypercubes, the prediction associated with each hypercube may consist of 
 %
-Then, the output value associated to a rule may be a constant numerical value (e.g., \iter{}, \gridex{}, \cart{}) or, otherwise, a linear combination of the input variables (e.g., \cart{}).
+\begin{inlinelist}
+	\item a constant numerical value (e.g., \iter{}, \gridex{}, \cart{}) or, 
+	\item a linear combination of the input variables (e.g., \cart{}).
+\end{inlinelist}
 %
-The procedure adopted to choose the best output value is based on an aggregated computation, and consists of averaging the output prediction values provided by the underlying predictor (for constant outputs) or in the fitting of a linear function of the input variables (otherwise).
-%
-The aggregation level of the computation depends on the hypercube associated to the rule.
-%
-Indeed, usually these computations are performed by considering only training instances \emph{inside} a cube, so the resulting rule is \emph{local}.
-%
-A factorisation of the common operations for both scenarios (constant and non-constant outputs) highlights that the creation of output values for extractors dedicated to regression tasks only differs in the raw aggregated computation described above.
-%
-As a consequence, the two possible computations may be exchanged without introducing any other alteration in a generic extractor, making it more versatile.
+The latter option, in particular, is well-suited for regression tasks, while the former may support both classification and regression tasks.
 
-It is possible to enlarge the applicability scope of these extractors to classification tasks thanks to the following consideration.
+To choose the best output value corresponding to each hypercube, one may either 
 %
-A classification rule based on a hypercube may be associated to a constant output value, that is the string label to be provided as prediction for every instance inside the cube.
+\begin{inlinelist}
+	\item aggregate the predictions corresponding to all available points in that hypercube -- e.g. via the `mean', `mode', or `median' statistical aggregation functions --, or
+	\item fit a local function \emph{locally} approximating the predictor in that hypercube.
+\end{inlinelist}
 %
-The label may trivially be the most common label predicted by the underlying predictor applied to all the instances inside the cube.
+Again, which option is better really depends on the learning task the underlying predictor has been designed for.
 %
-This generalisation enable the adoption for classification tasks of SKE techniques explicitly designed for regression.
+% The aggregation level of the computation depends on the hypercube associated to the rule.
+% %
+% Indeed, usually these computations are performed by considering only training instances \emph{inside} a cube, so the resulting rule is \emph{local}.
+% %
+% A factorisation of the common operations for both scenarios (constant and non-constant outputs) highlights that the creation of output values for extractors dedicated to regression tasks only differs in the raw aggregated computation described above.
+% %
+% As a consequence, the two possible computations may be exchanged without introducing any other alteration in a generic extractor, making it more versatile.
+
+% It is possible to enlarge the applicability scope of these extractors to classification tasks thanks to the following consideration.
+% %
+% A classification rule based on a hypercube may be associated to a constant output value, that is the string label to be provided as prediction for every instance inside the cube.
+% %
+% The label may trivially be the most common label predicted by the underlying predictor applied to all the instances inside the cube.
+% %
+% This generalisation enable the adoption for classification tasks of SKE techniques explicitly designed for regression.
 
 \input{figures/fig-gen-pred.tex}
 
-In \Cref{fig:general-pred} are reported examples of predictions provided by a generalised extractor.
+In \Cref{fig:general-pred}, we report examples of predictions provided by a generalised extractor.
 %
 The three plots follow the same logic as \Cref{fig:general-sim}.
+%
+\gcnote{Preferirei che spiegassi l'immagine}
 
 \subsubsection{Output rule creation}
 
-After having selected a set of input space regions and one of corresponding output decision, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
+After selecting a set of input space regions, and one output decision for each of them, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
 %
 The precondition is a formal description of a single input region in terms of individual features, for instance by means of value inclusion inside an interval.
 %
 Hypercubic $d$-dimensional regions may be described through the conjunction of (at most) $d$ interval inclusion conditions.
 %
 On the other hand, the postcondition is simply the decision calculated for the region on the basis of the task at hand, as previously described.
+
+\gcnote{Un esempio ci starebbe bene}
 
 \subsection{Comparison of Existing Methods}
 
