@@ -49,7 +49,7 @@ url=http://andreaomicini.apice.unibo.it
 \cortext[1]{Corresponding author.}
 
 \begin{abstract}
-Symbolic knowledge-extraction (SKE) algorithms proposed by the explainable artificial intelligence community to obtain human-intelligible explanations for opaque machine learning predictors are currently being studied and developed with growing interest also in order to achieve believability in interactions.
+Symbolic knowledge-extraction (SKE) algorithms proposed by the explainable artificial intelligence community to obtain human-intelligible explanations for opaque machine learning predictors are currently being studied and developed with growing interest, also in order to achieve believability in interactions.
 %
 However, choosing the most adequate extraction procedure amongst the many existing in the literature is becoming more and more challenging, as the amount of available methods increases.
 %
@@ -108,9 +108,11 @@ We also report as a concrete example the implementation of the proposed generali
 % %
 % The focus of this paper is on the latter strategy.
 
-One of the main features to be underpinned by a  believable human-agent interaction is the capability of being \emph{explainable}. Symbolic knowledge extraction (SKE) is a powerful tool within the scope of explainable artificial intelligence (XAI).
+One of the main features to be underpinned by a believable human-agent interaction is the capability of being \emph{explainable}. 
 %
-It enables reverse-engineering of the black-box machine learning algorithms---which are nowadays exploited in many AI tasks~\cite{rocha2012far}.
+Along this line, symbolic knowledge extraction (SKE) is a powerful tool within the scope of explainable artificial intelligence (XAI).
+%
+It enables reverse-engineering of the black-box (BB) machine learning algorithms---which are nowadays exploited in many AI tasks~\cite{rocha2012far}.
 %
 Thanks to SKE, data scientists can associate human-comprehensible, \emph{post-hoc} explanations~\cite{KENNY2021103459} to the recommendations or decisions computed by the most common prediction-effective -- yet, poorly interpretable -- algorithms.
 %
@@ -366,7 +368,7 @@ Rules have the following logical form:
 %
 to be read as ``if the input vector $\mathbf{x} \in \mathcal{X}$ is in some hypercube $H_i$, then the prediction $\mathbf{y} \in \mathcal{Y}$ is $f_i(\mathbf{x})$'', where $f_i(\mathbf{x})$ is a function that approximates $P$ outcomes.
 %
-Note that each hypercube $H_i$ is a partition of the input space $\mathcal{X}$, and $f_i$ is the function approximating $P$ outcomes related to that hypercube (could be a costant, a linear function,...), i.e., : $f_i(\mathbf{x}) \approx P(\mathbf{x}),~\forall \mathbf{x} \in H_i$.
+Note that each hypercube $H_i$ is a partition of the input space $\mathcal{X}$, and $f_i$ is the function approximating $P$ outcomes related to that hypercube (could be a costant, a linear function, etc.), i.e.: $f_i(\mathbf{x}) \approx P(\mathbf{x}),~\forall \mathbf{x} \in H_i$.
 
 Without entering technical details, hypercube-based extraction procedures should then attempt to select hypercubes and local approximation functions in such a way as to maximise the fidelity of the overall rule set/list w.r.t. $P$.
 %
