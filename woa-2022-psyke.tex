@@ -469,7 +469,7 @@ Conversely, in the case of regression with constant outputs, output-similarity m
 %
 where $\theta$ is a parameter defining the strictness of the similarity criterion.
 
-Of course, definition \ref{eq:simRegK} is not suitable to capture the similarity amongst hypercubes characterised by a high variability of $P$.
+Of course, definition \ref{eq:simRegK} is not suitable to capture the similarity amongst hypercubes characterised by high variability of $P$.
 %
 In such a case a more complex solution is required:
 %
@@ -477,14 +477,16 @@ In such a case a more complex solution is required:
 	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mae}(f_{1,2}, H_1 \cup H_2) \leq (\text{mae}(f_1, H_1) + \text{mae}(f_2, H_2)) / 2 \,
 \end{equation}
 %
-where $\text{mae}(f, H)$ is the mean absolute error of the linear function $f$ in approximating the input/output relationship for data instances in $H$.
+where $\text{mae}(f, H)$ is the mean absolute error of the linear function $f$ in approximating 
+%the input/output relationship 
+$P$ for data in $H$.
 %
 In other words, $H_1$ and $H_2$ are output-similar if it is possible to
 %
 \begin{inlinelist}
-	\item merge the two hyper-cubes, and to
-	\item find a linear combination of the input variables representing the input/output relationship of the merged region, and
-	\item the predictive performance of such linear combination is better than the average performance of the linear functions $f_1, f_2$ associated to the corresponding separated subregions.
+	\item merge the two hyper-cubes, %and to
+	\item find a linear combination $f_{1,2}$ of the input variables representing the input/output relationship of the so merged regions, and
+	\item reach a predictive performance of $f_{1,2}$ better than the average performance of the linear functions $f_1, f_2$ associated with the corresponding separated subregions.
 \end{inlinelist}
 
 \input{figures/fig-gen-sim.tex}
@@ -495,21 +497,21 @@ Figures concerning the regression task represent constant and non-constant extra
 %
 The example assumes a 2-dimensional data set with continuous input features both ranging in the interval [0, 5].
 %
-In the figures, hypercubes to be expanded/merged are those having coloured background.
+In the figures, hypercubes to be expanded/merged are those having coloured backgrounds.
 %
 Possible adjacent hypercubes to be joined to them are represented as hypercubes having no background.
 %
 Adjacent hypercubes that are similar to the hypercubes to be expanded are represented with hatched background.
 %
-It worths noting that for the example depicted in \Cref{fig:gs2} a similarity threshold $\theta$ equal to 5.0 has been chosen.
+It is worth noting that for the example depicted in \Cref{fig:gs2} a similarity threshold $\theta$ equal to 5.0 has been chosen.
 %
-In \Cref{fig:gs3} the predictive errors corresponding to the adjacent hypercubes as well as the calculated errors of the possible merged regions are omitted to keep the image clearer.
+In \Cref{fig:gs3} the predictive errors corresponding to the adjacent hypercubes as well as the calculated errors of the possible merged regions are omitted for the clarity of the image.
 
 \subparagraph{Predictive error assessment}
 
-A generalised metrics is necessary to assess the predictive performance of a set of rules for both classifications and regressions.
+A generalised metric is necessary to evaluate the predictive performance of a set of rules for both classifications and regressions.
 %
-We propose as error function for a rule set $R$ applied to a data set $D$ the following:
+We propose the following function as error function for a rule set $R$ applied to a data set $D$:
 %
 \begin{equation}\label{eq:error}
 	\text{error}(R, D) = 
@@ -527,7 +529,7 @@ In \Cref{fig:general-error} we report some examples of predictive errors measure
 %
 \Cref{fig:ge1,fig:ge2,fig:ge3} represent a classification task and two regression tasks, respectively.
 %
-The first regression task is approximated by the extractor with constant outputs, whereas the second is associated to non-constant outputs.
+The first regression task is approximated by the extractor with constant outputs, whereas the second is associated with non-constant outputs.
 %
 The predictive error is reported as misclassifications in the first case and absolute error in the others.
  
@@ -583,7 +585,7 @@ As for the previous examples, a 2-dimensional data set with continuous input fea
 %
 The background colour represents the output provided by the extractor.
 
-\subsubsection{Output rule creation}\label{ssec:rule}
+\subsubsection{Output rules set creation}\label{ssec:rule}
 
 After selecting a set of input space regions and one output decision for each of them, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
 %
