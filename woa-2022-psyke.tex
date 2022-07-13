@@ -345,7 +345,7 @@ As for the knowledge provided in output by extractors, it is possible to choose 
 %
 Input data as well may follow Semantic Web encoding, so \psyke{} extractors accept tabular data or knowledge graphs stored in OWL ontologies.
 
-\section{Hypercube-based methods}\label{sec:contribution}
+\section{Hypercube-based knowledge extractors}\label{sec:contribution}
 
 In this section, we provide a general model of hypercube-based knowledge extractors.
 %
@@ -355,27 +355,26 @@ We then delve into the details of different algorithms from the literature, and 
 
 Hypercube-base extraction methods are \emph{pedagogical} extraction procedures which can operate on trained ML predictors of any sort.
 %
-They consider the predictor $P$ undergoing extraction as an oracle to be queried multiple times, in order to find a partitioning $H_1 \cup \ldots \cup H_n$ of its input space $\mathcal{X}$ such that the output space $\mathcal{Y}$ can be concisely and correctly expressed for each partition.
+They consider the predictor $P$ undergoing extraction as an oracle to be queried multiple times, in order to find a partitioning $H_1 \cup \ldots \cup H_n$ of its input space $\mathcal{X}$ such that the output space $\mathcal{Y}$ can be concisely %and correctly 
+expressed for each partition.
 %
-Hence, they extract knowledge in the form of rule lists or trees, where each rule carries attempts to describe the outcome of $P$ in a particular hypercube $H_i \subseteq \mathcal{X}$. 
+Hence, they extract knowledge in the form of rule lists or trees, where each rule attempts to describe the outcome of $P$ for a particular hypercube $H_i \subseteq \mathcal{X}$. 
 %
-More formally: 
+Rules have the following logical form: 
 %
 \[ \mathbf{x} \in H_i \rightarrow (~\mathbf{y} = f_i(\mathbf{x})~) \]  
 %
-to be read as ``if the input vector $\mathbf{x} \in \mathcal{X}$ is in some hypercube $H_i$, then the prediction $\mathbf{y} \in \mathcal{Y}$ is $f_i(\mathbf{x})$''.
+to be read as ``if the input vector $\mathbf{x} \in \mathcal{X}$ is in some hypercube $H_i$, then the prediction $\mathbf{y} \in \mathcal{Y}$ is $f_i(\mathbf{x})$'', where $f_i(\mathbf{x})$ is a function that approximates $P$ outcomes.
 %
-Notice that each hypercube $H_i$ is a partition of the input space $\mathcal{X}$, and it comes with a function $f_i$ approximating $P$ within that hypercube.
-%
-More formally: $f_i(\mathbf{x}) \approx P(\mathbf{x}),~\forall \mathbf{x} \in H_i$.
+Note that each hypercube $H_i$ is a partition of the input space $\mathcal{X}$, and $f_i$ is the function approximating $P$ outcomes related to that hypercube (could be a costant, a linear function,...), i.e., : $f_i(\mathbf{x}) \approx P(\mathbf{x}),~\forall \mathbf{x} \in H_i$.
 
-Regardless of its technical details, hypercube-based extraction procedures should then attempt to select hypercubes and local approximation functions in such a way to maximise the fidelity of the overall rule set/list w.r.t. $P$.
+Without entering technical details, hypercube-based extraction procedures should then attempt to select hypercubes and local approximation functions in such a way as to maximise the fidelity of the overall rule set/list w.r.t. $P$.
 %
-To do so, they follow a quite liner workflow, may be roughly summarised in 3 steps, namely:
+Accordingly, they follow a pretty linear workflow, which may be roughly summarised in 3 steps, namely:
 %
 \begin{enumerate}
-	\item partition the input space into disjoint hypercubes $H_1 \cup \ldots \cup H_n$, following some strategy and according to defined constraints;
-	% %
+	\item partition the input space into disjoint hypercubes $H_1 \cup \ldots \cup H_n$, following a selected strategy and according to possible defined constraints;
+		% %
 	% \begin{itemize}
 	% 	\item e.g. one may be willing to minimise $n$ while maximising the size of each $H_i$
 	% \end{itemize}
@@ -384,86 +383,83 @@ To do so, they follow a quite liner workflow, may be roughly summarised in 3 ste
 	% \begin{itemize}
 	% 	\item e.g. one may be willing to maximise the similarity among $P$ and $f_i$ in $H_i$
 	% \end{itemize}
-	\item create a rule set where each rule \emph{concisely} represents $H_i$ and $f_i$ to describe the behaviour of $P$ in $H_i$.
+	\item create a rule set where each rule \emph{concisely} represents the behaviour of $P$ in $H_i$ via $f_i$.
 \end{enumerate}
 %
 % It is important to notice that hypercube-based extractors produce as output a predictive rule per found partition.
 
-In the following, we delve into the details of all such phases, individually.
+In the following, we delve into the details of all such phases.
 
 \subsubsection{Input space partitioning}
 
-Input space partitioning is a recursive computation aimed at finding the optimal amount, shape and size of hypercubes w.r.t.\ some \emph{desiderata}, such as:
+Input space partitioning is a recursive computation aimed at finding the optimal number, shape and size of hypercubes w.r.t.\ some \emph{desiderata}, such as:
 %
 \begin{inlinelist}
 	\item covering the whole input space;
 	\item obtaining disjoint regions;
-	\item minimising the regions' amount;
+	\item minimising the number of regions;
 	\item maximising the similarity amongst the samples inside single regions;
 	\item minimising the predictive error correlated to each partition.
 \end{inlinelist}
 
-It is not possible to satisfy all these conditions at once, especially when dealing with high-dimensional data sets.
+These conditions cannot be all simultaneously satisfied, especially when dealing with high-dimensional data sets.
 %
-For this reason, some requirements may be relaxed.
+For such a reason, some requirements may be relaxed.
 %
 For instance, the input space coverage may be limited only to \emph{interesting} hypercubes, neglecting the others.
 %
-A hypercube is considered as `interesting' if it contains training samples, as it may have a role to play in drawing future predictions.
+Let us consider a hypercube `interesting' if it contains training samples, as it may have a role to play in drawing future predictions.
 
-Alternatively, the partitioning process may terminate after a predefined number of iterations, as some existing algorithms actually do.
+Alternatively, the partitioning process may terminate after a predefined number of iterations, as some state-of-the-art algorithms actually do.
 %
 However, this may lead to the indiscriminate exclusion of some regions of the input space that, conversely, are not negligible.
 %
-This may result in the impossibility for the explainable model to provide predictions for a subset of input instances.
+In its turn, the explained model will not to be able to provide predictions for a subset of input instances.
 
 Non-contiguous hypercubes may be relaxed into hierarchical or fuzzy regions, possibly mapped into non-overlapping rules, in order to have unambiguous output predictions.
 
 \paragraph{Similarity and fidelity}
 
-The amount of the hypercubes an input space is partitioned into may greatly impact the interpretability of the final symbolic model.
+The amount of hypercubes an input space is partitioned into may significantly impact the interpretability of the final symbolic model.
 %
-In fact, hypercube-based methods will output as many rules as the hypercubes they have partitioned the input space into---and of course more (or more complex) rules implies lower readability for the human reader.
+In fact, hypercube-based methods will output as many rules as the hypercubes they have partitioned the input space into---and of course more (or more complex) rules imply lower readability for the human reader.
 
-Along this line, the capability of grouping together similar samples into a single hypercube is quintessential to support the creation of few, general, and simple rules %that capture well the average behaviour of instances belonging to the same region.
-which capture the behaviour of the original predictor with high fidelity.
+The capability of grouping together similar samples into a single hypercube is so quintessential for supporting the creation of few, general, and simple rules which capture the behaviour of the original predictor with high fidelity.
 %
 This corresponds to
 %
 \begin{inlinelist}
 	\item data points from the same hypercube drawing \emph{similar} predictions, and to
-	\item those predictions having a high \emph{fidelity} (or, equivalently, low error rates) w.r.t. to the predictor undergoing extraction.
+	\item predictions having a high \emph{fidelity} (or, equivalently, low error rates) w.r.t. to the original predictor.
 \end{inlinelist}
 %
-Accordingly, here we delve into the details of how 
+Accordingly, here we delve into the details of how to assess
 %
 \begin{inlinelist}
 	\item similarity amongst data points from \emph{contiguous} hypercubes, as well as
-	\item predictive errors amongst a candidate rule and the underlying predictor
+	\item predictive errors between a candidate rule and the underlying predictor.
 \end{inlinelist}
 %
-can be assessed in many different scenarios.
+%can be assessed in many different scenarios.
 
 \subparagraph{Similarity amongst instances}
 
-Partitions of an input space may be considered similar according to the following definitions:
+Input space partitions may be considered similar according to the following definitions:
 %
 \begin{description}
 	\item[input closeness] if the input variables of both subregions have values ranging in similar domains, as for the case of adjacent disjoint or overlapping regions;
-	\item[output closeness] if the output associated to the instances in the 2 subregions may be defined similar.
+	\item[output closeness] if the output associated with the instances in the two subregions may be defined as similar.
 \end{description}
 %
-While it is straightforward to check input closeness (e.g., through Euclidean distance), dealing output closeness requires taking into account the learning problem at hand.
+While it is straightforward to check input closeness (e.g., through Euclidean distance), dealing with output closeness requires taking into account the learning problem at hand.
 
-As far as classification is concerned, we may consider two hyper-cubes $H_1$ and $H_2$ as \emph{output-close} w.r.t. a predictor $P$ if (and only if) the most frequent output class is the same in both hypercubes.
-%
-More formally:
+As far as classification is concerned, we may consider two hyper-cubes $H_1$ and $H_2$ as \emph{output-close} w.r.t. a predictor $P$ if (and only if) the most frequent output class is the same in both hypercubes:
 %
 \begin{equation}\label{eq:simClass}
 	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mode}(P(H_1)) = \text{mode}(P(H_2))\,
 \end{equation}
 %
-where, by $\text{mode}(\cdot)$ we denote the statistical operator returning the most frequent item over in a set, and $P(H)$ is a notational abuse for $\{ P(\textbf{x}) : \textbf{x} \in H \}$.
+where ${mode}(\cdot)$ denotes the statistical operator returning the most frequent item over a set, and $P(H)$ is a shortcut standing for $\{ P(\textbf{x}) : \textbf{x} \in H \}$, to lighten the notation.
 
 Conversely, in the case of regression with constant outputs, output-similarity may be expressed as a function of the absolute difference between the mean output predictions performed by the predictor $P$ on the two hypercubes $H_1$ and $H_2$:
 %
@@ -473,9 +469,9 @@ Conversely, in the case of regression with constant outputs, output-similarity m
 %
 where $\theta$ is a parameter defining the strictness of the similarity criterion.
 
-Of course, this definition \ref{eq:simRegK} is not suitable to capture the similarity amongst hypercubes characterised by a high variability of $P$.
+Of course, definition \ref{eq:simRegK} is not suitable to capture the similarity amongst hypercubes characterised by a high variability of $P$.
 %
-In this case a more complex solution is required:
+In such a case a more complex solution is required:
 %
 \begin{equation}\label{eq:simRegLin}
 	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mae}(f_{1,2}, H_1 \cup H_2) \leq (\text{mae}(f_1, H_1) + \text{mae}(f_2, H_2)) / 2 \,
