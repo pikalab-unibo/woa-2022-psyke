@@ -49,17 +49,17 @@ url=http://andreaomicini.apice.unibo.it
 \cortext[1]{Corresponding author.}
 
 \begin{abstract}
-Symbolic knowledge-extraction (SKE) algorithms proposed by the explainable artificial intelligence community to obtain human-intelligible explanations for opaque machine learning predictors are currently being studied and developed with growing interest.
+Symbolic knowledge-extraction (SKE) algorithms proposed by the explainable artificial intelligence community to obtain human-intelligible explanations for opaque machine learning predictors are currently being studied and developed with growing interest also in order to achieve believability in interactions.
 %
-However, choosing the most adequate extraction procedure amongst the many existing into the literature is becoming more and more challenging, as the amount of available method increases.
+However, choosing the most adequate extraction procedure amongst the many existing in the literature is becoming more and more challenging, as the amount of available methods increases.
 %
-In fact, most of the proposed algorithms come with \emph{constraints} concerning the situations they can be applied into.
+In fact, most of the proposed algorithms come with \emph{constraints} concerning the situations they can be applied to.
 
 In this paper we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
 %
 Despite being commonly considered regression-specific, in this paper we discuss why hypercube-based SKE methods are flexible enough to deal with classification problems as well.
 %
-More generally, we propose a common metamodel for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
+More generally, we propose a common generalised model for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
 %
 % We show that further manipulations may be horizontally enabled for a large class of knowledge extractors without the need to revise their algorithms, but only adding our proposed generalisation.
 %
@@ -108,11 +108,11 @@ We also report as a concrete example the implementation of the proposed generali
 % %
 % The focus of this paper is on the latter strategy.
 
-Symbolic knowledge extraction (SKE) is a powerful tool within the scope of explainable artificial intelligence (XAI).
+One of the main features to be underpinned by a  believable human-agent interaction is the capability of being \emph{explainable}. Symbolic knowledge extraction (SKE) is a powerful tool within the scope of explainable artificial intelligence (XAI).
 %
 It enables reverse-engineering of the black-box machine learning algorithms---which are nowadays exploited in many AI tasks~\cite{rocha2012far}.
 %
-Thanks to SKE, data scientists can associate human-comprehensible, \emph{post-hoc} explanations~\cite{KENNY2021103459} to the recommendations or decisions computed by most common prediction-effective -- yet, poorly interpretable -- algorithms.
+Thanks to SKE, data scientists can associate human-comprehensible, \emph{post-hoc} explanations~\cite{KENNY2021103459} to the recommendations or decisions computed by the most common prediction-effective -- yet, poorly interpretable -- algorithms.
 %
 To cite some examples, SKE is widely adopted to credit-risk evaluation \cite{baesens2003using,baesens2001building,steiner2006using}, medical diagnosis -- i.e., to make early breast cancer prognosis predictions \cite{franco2007early} and for recognising hepatobiliary disorders \cite{hayashi2000comparison} or other diseases and dysfunctions \cite{bologna1997three} --, credit card screening \cite{setiono2011rule}, intrusion detection systems \cite{hofmann2003rule}, and keyword extraction \cite{azcarraga2012keyword}.
 
@@ -163,7 +163,7 @@ Methods of such sort extract symbolic knowledge by querying black-box predictors
 %
 Despite being commonly considered regression-specific, we show that hypercube-based SKE methods are flexible enough to deal with classification problems as well.
 %
-More generally, we propose a common metamodel for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
+More generally, we propose a common model for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
 
 Accordingly, the contribution of this paper is manifold.
 %
@@ -193,9 +193,9 @@ demonstrate the versatility of hypercube-based methods, we analyse disparate SKE
 
 Accordingly, the remainder of this paper is organised as follows.
 %
-\Cref{sec:state} describes the state of the art for SKE as well as some background notion to fully understand the work.
+\Cref{sec:state} describes the state of the art for SKE as well as some background notions to fully understand the work.
 %
-\Cref{sec:contribution} presents our meta-model for hypercube-based methods and compares most relevant methods from the literature, which are then exemplified in \Cref{sec:experiments}.
+\Cref{sec:contribution} presents our model for hypercube-based methods and compares the most relevant methods from the literature, which are then exemplified in \Cref{sec:experiments}.
 %
 Finally, conclusions are drawn in \Cref{sec:conclusions}.
 
@@ -819,25 +819,25 @@ In this Subsection we compare the results of \cart{}, \iter{} and \gridex{} appl
 %
 Results are compared on the basis of readability, fidelity and predictive performance, other than the decision boundaries induced by the extracted rules.
 %
-As for readability, all the extractors are equivalent w.r.t.\ the amount of rules, since they are able to extract one predictive rule per output class.
+As for readability, all the extractors are equivalent w.r.t.\ the number of rules, since they are able to extract one predictive rule per output class.
 %
 Conversely, the readability of \iter{} is hindered by the number of antecedents per rule, since it produces a constraint for each input dimension.
 %
 Under this perspective, \cart{} and \gridex{} are able to keep amongst the rules' conditions only those involving relevant features to perform the classification, resulting in a fourth of the total amount of antecedents w.r.t.\ \iter{}.
 
-The decision boundaries provided by \gridex{} and \iter{} are more similar to those produced by the underlying $k$-NN, but no sensible difference in the classification accuracy are noticeable, since all extractors present a score between 0.94 and 0.95 (we recall that the 9-NN has an accuracy score equal to 0.97).
+The decision boundaries provided by \gridex{} and \iter{} are more similar to those produced by the underlying $k$-NN, but no sensible difference in the classification accuracy is noticeable, since all extractors present a score between 0.94 and 0.95 (we recall that the 9-NN has an accuracy score equal to 0.97).
 %
 A similar reasoning may be performed about the extractors' fidelity, equal to 0.95 for \cart{} and to 0.97 for \iter{} and \gridex{}.
 
-It worths noting that \gridex{} do not provide a classification rule for a small input space region, since it finds that region as negligible (because there are not data set instances belonging to it).
+It is worth noting that \gridex{} does not provide a classification rule for a small input space region, since it finds that region as negligible (because there are no data set instances belonging to it).
 
 \section{Conclusions}\label{sec:conclusions}
 
 In this paper we generalise a class of SKE techniques, namely hypercube-based methods, to make them suitable for classification tasks as well as regression tasks.
 %
-We do so by proposing a common metamodel for these methods and by concretely implementing our generalisation in the \psyke{} framework.
+We do so by proposing a common model for these methods and by concretely implementing our generalisation in the \psyke{} framework.
 %
-The proposed metamodel considers in which ways it is possible to relax algorithmic patterns currently adopted by hypercube-based SKE extractors in order to widen their applicability scopes.
+The proposed generalised model considers in which ways it is possible to relax algorithmic patterns currently adopted by hypercube-based SKE extractors in order to widen their applicability scopes.
 %
 Our future works will be focused on extending the proposed generalisation to a wider class of SKE techniques, to enable a higher degree of usability for SKE techniques existing in the literature.
 
