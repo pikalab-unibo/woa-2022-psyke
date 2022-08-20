@@ -82,32 +82,6 @@ We also report as a concrete example the implementation of the proposed generali
 
 \section{Introduction}
 
-% \gcnote{Leggete la nuova intro \& abstract. Se vi piace ristrutturiamo il paper, se no rollbackiamo e teniamo la versione di fede.}
-
-% Many everyday tasks are currently carried out mainly via machine learning (ML) models~\cite{rocha2012far}.
-% %
-% Their increasing ubiquity descends from the impressive predictive performance they exhibit when used to support decision making in a wide variety of application fields, for instance customer profiling, financial forecasting, speech and image recognition, etc.
-% %
-% These data-driven predictors are trained upon a given amount of input instances, used to tune their internal parameters with the objective of minimising a predefined loss function w.r.t.\ training data.
-% %
-% Since the acquired knowledge is sub-symbolically stored in the form of parameter values, they are not directly interpretable from the human perspective, so the term \emph{black box} (BB) is used to refer these \emph{opaque} ML predictors.
-% %
-% Despite the lacking of human interpretability, BB models are anyway adopted thanks to their performance.
-
-% There exist, however, critical applications areas -- highly impacting, for instance, in finance, law, healthcare or other domains involving human health and wealth -- where humans beings must be capable of understanding and explaining the obtained predictions, or else discard them as unacceptable.
-% %
-% Several methodologies have been proposed by the explainable artificial intelligence community to overcome the issues deriving from the lack of explainability~\cite{guidotti2018survey}.
-% %
-% The first consists of uniquely relying on \emph{interpretable} predictors~\cite{Rudin2019}, as, for instance, generalised linear models and decision trees, in order to obtain trained models explainable by construction.
-% %
-% This solution may bring negative repercussions on the overall predictive performance of the model, since it excludes some of the most promising ML algorithms, as artificial neural networks.
-% %
-% Another strategy is the reverse-engineering of the BB inner operation to derive \emph{post-hoc} explanations~\cite{KENNY2021103459}, for example via symbolic knowledge extraction (SKE).
-% %
-% This second solution allow data scientists to associate human-comprehensible knowledge to outputs given by prediction-effective, but opaque, algorithms.
-% %
-% The focus of this paper is on the latter strategy.
-
 One of the main features to be underpinned by a believable human-agent interaction is the capability of being \emph{explainable}. 
 %
 Along this line, symbolic knowledge extraction (SKE) is a powerful tool within the scope of explainable artificial intelligence (XAI).
@@ -116,7 +90,7 @@ It enables reverse-engineering of the black-box (BB) machine learning algorithms
 %
 Thanks to SKE, data scientists can associate human-comprehensible, \emph{post-hoc} explanations~\cite{KENNY2021103459} to the recommendations or decisions computed by the most common prediction-effective -- yet, poorly interpretable -- algorithms.
 %
-To cite some examples, SKE is widely adopted to credit-risk evaluation \cite{baesens2003using,baesens2001building,steiner2006using}, medical diagnosis -- i.e., to make early breast cancer prognosis predictions \cite{franco2007early} and for recognising hepatobiliary disorders \cite{hayashi2000comparison} or other diseases and dysfunctions \cite{bologna1997three} --, credit card screening \cite{setiono2011rule}, intrusion detection systems \cite{hofmann2003rule}, and keyword extraction \cite{azcarraga2012keyword}.
+To cite some examples, SKE is widely adopted to credit-risk evaluation \cite{baesens2003using,baesens2001building,steiner2006using}, medical diagnosis -- i.e., to make early breast cancer prognosis predictions \cite{franco2007early} and for recognising hepatobiliary disorders \cite{hayashi2000comparison} or other diseases and dysfunctions \cite{bologna1997three} --, credit card screening \cite{setiono2011rule}, intrusion detection systems \cite{hofmann2003rule}, keyword extraction \cite{azcarraga2012keyword}, and space mission data prediction~\cite{sabbatini22LPFSKE}.
 
 The basic idea behind SKE is to construct \emph{symbolic} (hence, interpretable) models mimicking the behaviour of the pre-existing black-box predictors to be explained.
 %
@@ -161,11 +135,11 @@ In fact, SKE algorithms may commonly target specific learning tasks (classificat
 
 In this paper, we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
 %
-Methods of such sort extract symbolic knowledge by querying black-box predictors as oracles, and by recursively partitioning the input spaces of these black boxes into several hyper-cubes---hence following a divide-et-impera approach.
+Methods of such sort extract symbolic knowledge by querying black-box predictors as oracles, and by recursively partitioning the input spaces of these black boxes into several hypercubes---hence following a divide-et-impera approach.
 %
 Despite being commonly considered regression-specific, we show that hypercube-based SKE methods are flexible enough to deal with classification problems as well.
 %
-More generally, we propose a common model for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
+More generally, we propose a common model for hypercube-based methods, and we show how they can be exploited to perform SKE on data sets, predictors, or learning tasks of any sort.
 
 Accordingly, the contribution of this paper is manifold.
 %
@@ -193,7 +167,7 @@ demonstrate the versatility of hypercube-based methods, we analyse disparate SKE
 %
 % We show that it is possible to obtain better results by generalising these algorithms according to our method in order to obtain outputs in the form of linear combination of the input variables.
 
-Accordingly, the remainder of this paper is organised as follows.
+The remainder of this paper is organised as follows.
 %
 \Cref{sec:state} describes the state of the art for SKE as well as some background notions to fully understand the work.
 %
@@ -233,15 +207,15 @@ Knowledge extraction algorithms can be categorised along three orthogonal dimens
     \item\label{item:category:translucency} the supported underlying ML models, usually known as \emph{translucency}.
 \end{inlinelist}
 
-Supporting tasks (\cref{item:category:learning-task}) are usually supervised classification or regression.
+Supported tasks (\cref{item:category:learning-task}) are usually supervised classification or regression.
 %
-To the best of out knowledge, so far only supervised machine learning tasks have been considered by SKE, thus neglecting unsupervised or reinforcement learning tasks.
+To the best of our knowledge, so far only supervised machine learning tasks have been considered by SKE, thus neglecting unsupervised or reinforcement learning tasks.
 %
 A cluster of SKE algorithms can only explain BB classifiers -- e.g.\ Rule-extraction-as-learning~\cite{craven1994using}, \trepan~\cite{craven1996extracting} and others \cite{barakat2005eclectic,martens2007comprehensible} --, while a different cluster is designed to support BB regressors---e.g., \iter~\cite{huysmans2006iter}, \gridex~\cite{gridex-extraamas2021}, \gridrex{}~\cite{gridrex-kr2022} and others~\cite{setiono2002extraction,schmitz1999ann,saito2002extracting}.
 %
 Finally, a little subset of SKE techniques are able to handle both tasks, as for the case of \textsc{G-Rex}~\cite{grex-icdm2008} and \cart~\cite{breiman1984classification}.
 
-As for the shape of the output knowledge (\cref{item:category:knowledge-form}), decision rules \cite{freitas2014comprehensible,huysmans2011empirical,murphy1991id2} and trees \cite{quinlan1993c4,simplifyingdt-ijmms27} are usually considered the most human-understandable way to represent knowledge.
+As for the shape of the output knowledge (\cref{item:category:knowledge-form}), decision rules \cite{freitas2014comprehensible,huysmans2011empirical,murphy1991id2} and trees \cite{quinlan1993c4,simplifyingdt-ijmms27} are usually considered the most human-understandable ways to represent knowledge.
 %
 For this reason the majority of SKE methods produce one of these two structures as output.
 %
@@ -267,7 +241,7 @@ This implies that each algorithm is bounded to a specific ML predictor, possibly
 %
 For instance, techniques analysing neural network connections are not applicable to support-vector machines and procedures explicitly designed for 3-layered networks are not suitable for deep ones.
 %
-On the other hand, pedagogical methods only observe the BB response to particular inputs.
+On the other hand, pedagogical methods only observe the BB response to particular inputs, i.e., they query the underlying BB (considered as an oracle) to generalise its behaviour w.r.t.\ the provided inputs.
 %
 For this reason pedagogical extractors do not present any limitation on the underlying predictor and thus they may be applied regardless of the BB nature.
 %
@@ -289,7 +263,7 @@ Fidelity is related to the capability of the extracted knowledge to mimic the un
 %
 Measurements involving predictions should be assessed via the same scoring function used for the underlying BB---which in turn strictly depends on the performed task.
 %
-Classifiers are usually evaluated via accuracy, precision, recall, and F1-score.
+Classifiers are usually evaluated via accuracy, precision, recall, and F$_1$ score.
 %
 Conversely, common metrics for regressors are the mean absolute/squared error (MAE/MSE) and the R${^2}$ score.
 
@@ -337,7 +311,7 @@ In particular, a schema of the data set can be given as input to formally descri
 
 \psyke{} also exhibits utilities to manipulate the data set and perform feature engineering, for instance procedures to discretise or scale continuous features and to one-hot encode discrete/discretised features.
 %
-In addition, there are automatic procedures to select the optimal parameters of the extractors, which manual tuning may be challenging for human users.
+In addition, there are automatic procedures to select the optimal parameters for extractors, which manual tuning may be challenging for human users.
 
 As for the knowledge provided in output by extractors, it is possible to choose between two options:
 \begin{inlinelist}
@@ -349,9 +323,9 @@ Input data as well may follow Semantic Web encoding, so \psyke{} extractors acce
 
 \section{Hypercube-based knowledge extractors}\label{sec:contribution}
 
-In this section, we provide a general model of hypercube-based knowledge extractors.
+We provide in this Section a general hypercube-based extractor model.
 %
-We then delve into the details of different algorithms from the literature, and we discuss how they match the model.
+We then delve into the details of different algorithms from the literature, discussing how they match the model.
 
 \subsection{Unified Model}
 
@@ -375,17 +349,17 @@ Without entering technical details, hypercube-based extraction procedures should
 Accordingly, they follow a pretty linear workflow, which may be roughly summarised in 3 steps, namely:
 %
 \begin{enumerate}
-	\item partition the input space into disjoint hypercubes $H_1 \cup \ldots \cup H_n$, following a selected strategy and according to possible defined constraints;
+	\item partitioning the input space into disjoint hypercubes $H_1 \cup \ldots \cup H_n$, following a selected strategy and according to possible defined constraints;
 		% %
 	% \begin{itemize}
 	% 	\item e.g. one may be willing to minimise $n$ while maximising the size of each $H_i$
 	% \end{itemize}
-	\item approximate the prediction of $P$ for each hypercube $H_i$, via some function $f_i$; and
+	\item approximating the prediction of $P$ for each hypercube $H_i$, via some function $f_i$; and
 	% %
 	% \begin{itemize}
 	% 	\item e.g. one may be willing to maximise the similarity among $P$ and $f_i$ in $H_i$
 	% \end{itemize}
-	\item create a rule set where each rule \emph{concisely} represents the behaviour of $P$ in $H_i$ via $f_i$.
+	\item creating a rule set where each rule \emph{concisely} represents the behaviour of $P$ in $H_i$ via $f_i$.
 \end{enumerate}
 %
 % It is important to notice that hypercube-based extractors produce as output a predictive rule per found partition.
@@ -455,7 +429,7 @@ Input space partitions may be considered similar according to the following defi
 %
 While it is straightforward to check input closeness (e.g., through Euclidean distance), dealing with output closeness requires taking into account the learning problem at hand.
 
-As far as classification is concerned, we may consider two hyper-cubes $H_1$ and $H_2$ as \emph{output-close} w.r.t. a predictor $P$ if (and only if) the most frequent output class is the same in both hypercubes:
+As far as classification is concerned, we may consider two hypercubes $H_1$ and $H_2$ as \emph{output-close} w.r.t. a predictor $P$ if (and only if) the most frequent output class is the same in both hypercubes:
 %
 \begin{equation}\label{eq:simClass}
 	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mode}(P(H_1)) = \text{mode}(P(H_2))\,
@@ -486,14 +460,14 @@ $P$ for data in $H$.
 In other words, $H_1$ and $H_2$ are output-similar if it is possible to
 %
 \begin{inlinelist}
-	\item merge the two hyper-cubes, %and to
+	\item merge the two hypercubes, %and to
 	\item find a linear combination $f_{1,2}$ of the input variables representing the input/output relationship of the so merged regions, and
 	\item reach a predictive performance of $f_{1,2}$ better than the average performance of the linear functions $f_1, f_2$ associated with the corresponding separated subregions.
 \end{inlinelist}
 
 \input{figures/fig-gen-sim.tex}
 
-For example, in \Cref{fig:general-sim} we report examples of similarity assessments calculated for a generalised extractor applied to a classification task (\Cref{fig:gs1}) and to a regression task (\Cref{fig:gs2,fig:gs3}).
+For instance, in \Cref{fig:general-sim} we report examples of similarity assessments calculated for a generalised extractor applied to a classification task (\Cref{fig:gs1}) and to a regression task (\Cref{fig:gs2,fig:gs3}).
 %
 Figures concerning the regression task represent constant and non-constant extractor outputs, respectively.
 %
@@ -529,7 +503,7 @@ where $\text{mae}(R, D)$ and $\text{accuracy}(R, D)$ are the mean absolute error
 
 In \Cref{fig:general-error} we report some examples of predictive errors measured for a generalised extractor by assuming a 2-dimensional data set with continuous input features both ranging in the [0, 5] interval.
 %
-\Cref{fig:ge1,fig:ge2,fig:ge3} represent a classification task and two regression tasks, respectively.
+The Figure represents a classification task and two regression tasks.
 %
 The first regression task is approximated by the extractor with constant outputs, whereas the second is associated with non-constant outputs.
 %
@@ -546,8 +520,8 @@ Data augmentation via random input samples is useful to attain higher predictive
 Provided that the input space has been adequately partitioned into several hypercubes, the prediction associated with each hypercube may consist of 
 %
 \begin{inlinelist}
-	\item a constant numerical value (e.g., \iter{}, \gridex{}, \cart{}) or, 
-	\item a linear combination of the input variables (e.g., \cart{}).
+	\item a constant numerical value (e.g., \iter{}, \gridex{}) or, 
+	\item a linear combination of the input variables (e.g., \gridrex{}).
 \end{inlinelist}
 %
 The latter option, in particular, is well-suited for regression tasks, while the former may support both classification and regression tasks.
@@ -583,7 +557,7 @@ In \Cref{fig:general-pred}, we report examples of predictions provided by a gene
 %
 As for the previous examples, a 2-dimensional data set with continuous input features both ranging in the [0, 5] interval is assumed.
 %
-\Cref{fig:gp1,fig:gp2,fig:gp3} show a classification task and two regression tasks, respectively, where the former regression task is approximated by the extractor with constant outputs.
+The Figure shows a classification task and two regression tasks, where the former regression task is approximated by the extractor with constant outputs.
 %
 The background colour represents the output provided by the extractor.
 
@@ -600,7 +574,7 @@ On the other hand, the postcondition is simply the decision calculated for the r
 Thus, extracted human-readable logic rules generally have the following format:
 %
 \begin{equation*}
-	\text{Output is ~} C \text{~ if ~} X_1 \in [l_1, u_1], X_2 \in [l_2, u_2], ..., X_n \in [l_n, u_n],
+	\text{Output is ~} O \text{~ if ~} X_1 \in [l_1, u_1], X_2 \in [l_2, u_2], ..., X_n \in [l_n, u_n],
 \end{equation*}
 %
 where $O$ is the output decision and $X_1, X_2, ..., X_n$ are input variables assuming values included in the intervals described by corresponding lower-bounds $l_i$ and upper-bounds $u_i$.
@@ -637,7 +611,7 @@ Similarity is calculated via mean absolute difference between the output values 
 
 \paragraph{\gridex{}}
 
-The \gridex algorithm~\cite{gridex-extraamas2021} may be considered as an extension of \iter{} aimed at overcoming its major drawback, i.e., the non-exhaustivity of its output rules.
+The \gridex{} algorithm~\cite{gridex-extraamas2021} may be considered as an extension of \iter{} aimed at overcoming its major drawback, i.e., the non-exhaustivity of its output rules.
 %
 \gridex{} achieves this goal because it is exhaustive by design.
 %
@@ -667,13 +641,13 @@ A first attempt to apply the generalisation proposed in this work to \gridex{}, 
 %
 Indeed, it is able to extract fully regressive rules, having as postconditions a linear combination of the input variables.
 %
-All the other details are identical to those described for \gridex{}, but it is able to achieve better predictive performance, fidelity and readability than \gridex{}
+All the other details are identical to those described for \gridex{}, but it is able to achieve better predictive performance, fidelity and readability than \gridex{}.
 
 \section{Case Study: \psyke}\label{sec:experiments}
 
-Here, we exemplify the effectiveness of hypercube-based methods, as implemented by the \iter{} and \gridex{} extraction algorithms.
+We exemplify the effectiveness of hypercube-based methods by considering the implementations of the \iter{} and \gridex{} extraction algorithms.
 %
-Both such methods are designed for regression and here applied to classification tasks.
+Both methods are designed for regression and here applied to classification tasks.
 %
 \cart{} is used as benchmark to assess the predictive performance of the modified extractors, since it is a state-of-the-art procedure directly applicable to data sets described by continuous features, without prior discretisation.
 %
@@ -681,13 +655,9 @@ All the adopted implementations are included in the \psyke{} framework\footnotem
 
 \footnotetext{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
 
-Experiments are executed on the well-known Iris data set\footnotemark.
+Experiments are executed on the well-known Iris data set\footnotemark,\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}} composed of 150 instances corresponding to Iris flower individuals.
 %
-\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}}
-%
-The data set is composed of 150 instances corresponding to Iris flower individuals.
-%
-Each instance is described by 4 continuous input features (i.e., petal and sepal width and length of the Iris exemplary) and a categorical class label (i.e., the species of the exemplary).
+Each instance is described by 4 continuous input features (i.e., petal and sepal width and length of the exemplary) and a categorical class label (i.e., the species of the exemplary).
 %
 Three different species are present in the Iris data set (namely, Setosa, Virginica, and Versicolor) and they are equally balanced (50 individuals per species).
 
@@ -695,9 +665,9 @@ The experiments are carried out as follows:
 %
 \begin{inlinelist}
 	\item the data set is randomly split into training and test sets, of equal size;
-	\item a $k$-nearest neighbour classifier is trained on the training set;
+	\item a $k$-nearest neighbour ($k$-NN) classifier is trained on the training set;
 	\item three different extractors are used to extract symbolic rules out of that classifier;
-	\item the predictive performance of both the classifier and the extracted rules are graphically compared -- in terms of decision boundaries --, and numerically assessed---in terms of accuracy and F1 scores. In the case of the extracted rules, fidelity and readability measurements are performed as well.
+	\item the predictive performance of both the classifier and the extracted rules are graphically compared -- in terms of decision boundaries --, and numerically assessed---in terms of accuracy and F$_1$ scores. In the case of the extracted rules, fidelity and readability measurements are performed as well.
 \end{inlinelist}
 %
 It worths noticing that the training set is used only to train the models.
@@ -712,19 +682,19 @@ Finally, the output knowledge readability is expressed as number of extracted ru
 
 \subsection{Predictor training}
 
-\input{tables/tab-predictor.tex}
-
 Extraction techniques require an underlying BB to be used as an oracle.
 %
 For this reason we trained and compared several $k$-NN classifiers, with different values for the $k$ hyper-parameter.
 %
-Details about the accuracy and F1 scores measured for each model are reported in \Cref{tab:predictor}.
+Details about the accuracy and F$_1$ scores measured for each model are reported in \Cref{tab:predictor}.
 %
 The best predictive performance is achieved by the 9-NN.
 %
 Consequently, in the following all the discussed extractors are applied to it.
 %
 The decision boundaries of the selected 9-NN are reported in \Cref{fig:knn}.
+
+\input{tables/tab-predictor.tex}
 
 \subsection{\cart{}}
 
@@ -750,7 +720,7 @@ In this example, only petal width and length are considered to assign class labe
 
 \input{tables/tab-iter}
 
-The \iter{} algorithm explain applied as well to explain the 9-NN classifier.
+The \iter{} algorithm has been applied as well to explain the 9-NN classifier.
 %
 We test several hyper-parameter values in order to attain the rule list having the highest possible predictive performance and fidelity.
 %
@@ -766,7 +736,7 @@ We test several hyper-parameter values in order to attain the rule list having t
 
 The results of our experiments for \iter{} are reported in \Cref{tab:iter}.
 %
-The best predictive performance, achieved with the parameters highlighted in bold font in the Table, correspond to the following rules.
+The best predictive performance, achieved with the parameters highlighted in bold font in the Table, corresponds to the following rules.
 %
 \prologimport{listings/iris-rules-iter.pl}
 %
@@ -776,7 +746,7 @@ The input space partitioning induced by the extracted rules is shown in \Cref{fi
 
 \input{tables/tab-gridex}
 
-Finally, as last step of our experiments, the \gridex{} extractor is applied to the 9-NN classifier
+Finally, as last step of our experiments, the \gridex{} extractor is applied to the 9-NN classifier.
 %
 In this case as well different values for the hyper-parameters are been explored.
 %
