@@ -231,25 +231,29 @@ Categorical data are usually associated to equalities (e.g.\ $x_i = c$) and set-
 %
 \mofn{} or fuzzy rules are other available alternatives for boolean/discrete or continuous data, respectively.
 
-Finally, The translucency dimension \cite{andrews1995survey} (\cref{item:category:translucency}) represents the strategy adopted by the SKE algorithm to obtain interpretable knowledge from a BB.
+Finally, the translucency dimension (\cref{item:category:translucency}) represents the strategy adopted by the SKE algorithm to obtain interpretable knowledge from a BB.
 %
-In particular, extractors may be \emph{decompositional}, \emph{pedagogical} or \emph{eclectic}.
+In particular, extractors may be \emph{decompositional} or \emph{pedagogical} \cite{andrews1995survey,xaisurvey-ia14}. % or \emph{eclectic}.
 %
-Decompositional techniques consider the internal structure of the underlying black box, together with inputs and provided outputs.
+Decompositional techniques consider the internal structure of the underlying black box, hence producing symbolic knowledge which mimics how it internally works.
 %
-This implies that each algorithm is bounded to a specific ML predictor, possibly having constraints on the internal structures.
+As a side-effect, decompositional algorithms are bound to specific sorts of ML predictors---and possibly introduce constraints on their internal structures.
 %
-For instance, techniques analysing neural network connections are not applicable to support-vector machines and procedures explicitly designed for 3-layered networks are not suitable for deep ones.
+For instance, techniques tailored on neural networks are not applicable to support-vector machines.
 %
-On the other hand, pedagogical methods only observe the BB response to particular inputs, i.e., they query the underlying BB (considered as an oracle) to generalise its behaviour w.r.t.\ the provided inputs.
+Similarly, procedures explicitly designed for 3-layered networks are not suitable for deeper ones.
 %
-For this reason pedagogical extractors do not present any limitation on the underlying predictor and thus they may be applied regardless of the BB nature.
+On the other hand, pedagogical methods can extract symbolic knowledge without relying on any information about the inner structure of predictors. 
 %
-Summing up, they are usually more general and potentially less precise, but considerations about the output performance strictly depend on the task at hand.
+They simply query the predictor as an oracle, observing its response to particular inputs, and generalise its behaviour accordingly.
 %
-Finally, eclectic procedures mix elements of the two aforementioned categories.
+For this reason, pedagogical extractors come with no constraints on sorts of predictors they can be applied to.
 %
-Since some kind of internal structure inspection is performed, it is possible to encompass them in the wider decompositional category.
+Hence, they are more general -- despite potentially less precise --, but considerations about the output performance strictly depend on the task at hand.
+%
+% Finally, eclectic procedures mix elements of the two aforementioned categories.
+% %
+% Since some kind of internal structure inspection is performed, it is possible to encompass them in the wider decompositional category.
 
 To evaluate the quality of SKE techniques different indicators are exploited, depending on the task to solve.
 %
@@ -435,7 +439,7 @@ As far as classification is concerned, we may consider two hypercubes $H_1$ and 
 	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mode}(P(H_1)) = \text{mode}(P(H_2))\,
 \end{equation}
 %
-where ${mode}(\cdot)$ denotes the statistical operator returning the most frequent item over a set, and $P(H)$ is a shortcut standing for $\{ P(\textbf{x}) : \textbf{x} \in H \}$, to lighten the notation.
+where $\text{mode}(\cdot)$ denotes the statistical operator returning the most frequent item over a set, and $P(H)$ is a shortcut standing for $\{ P(\textbf{x}) : \textbf{x} \in H \}$, to lighten the notation.
 
 Conversely, in the case of regression with constant outputs, output-similarity may be expressed as a function of the absolute difference between the mean output predictions performed by the predictor $P$ on the two hypercubes $H_1$ and $H_2$:
 %
@@ -655,7 +659,9 @@ All the adopted implementations are included in the \psyke{} framework\footnotem
 
 \footnotetext{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
 
-Experiments are executed on the well-known Iris data set\footnotemark,\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}} composed of 150 instances corresponding to Iris flower individuals.
+Experiments are executed on the well-known Iris data set\footnotemark, composed of 150 instances corresponding to Iris flower individuals.
+%
+\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}}
 %
 Each instance is described by 4 continuous input features (i.e., petal and sepal width and length of the exemplary) and a categorical class label (i.e., the species of the exemplary).
 %
