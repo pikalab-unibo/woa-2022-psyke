@@ -57,7 +57,7 @@ In fact, most of the proposed algorithms come with \emph{constraints} over their
 
 In this paper we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
 %
-Despite being commonly considered regression-specific, we discuss why hypercube-based SKE methods are flexible enough to deal with classification problems as well.
+Despite being commonly considered as regression-specific, we discuss why hypercube-based SKE methods are flexible enough to deal with classification problems as well.
 %
 More generally, we propose a common generalised model for hypercube-based methods, and we show how they can be exploited to perform SKE on datasets, predictors, or learning tasks of any sort.
 %
@@ -84,11 +84,11 @@ We also report as a concrete example the implementation of the proposed generali
 
 One of the main features to be underpinned by a believable human-agent interaction is the capability of being \emph{explainable}. 
 %
-Along this line, symbolic knowledge extraction (SKE) is a powerful tool within the scope of explainable artificial intelligence (XAI).
+Along this line, \emph{symbolic knowledge extraction} (SKE) is a powerful tool within the scope of explainable artificial intelligence (XAI).
 %
 It enables reverse-engineering of the black-box (BB) machine learning algorithms---which are nowadays exploited in many AI tasks~\cite{rocha2012far}.
 %
-Thanks to SKE, data scientists can associate human-comprehensible, \emph{post-hoc} explanations~\cite{KENNY2021103459} to the recommendations or decisions computed by the most common prediction-effective -- yet, poorly interpretable -- algorithms.
+SKE allows data scientists to associate human-comprehensible, \emph{post-hoc} explanations~\cite{KENNY2021103459} to the recommendations or decisions computed by the most common prediction-effective -- yet, poorly interpretable -- algorithms.
 %
 To cite some examples, SKE is widely adopted to credit-risk evaluation \cite{baesens2003using,baesens2001building,steiner2006using}, medical diagnosis -- i.e., to make early breast cancer prognosis predictions \cite{franco2007early} and for recognising hepatobiliary disorders \cite{hayashi2000comparison} or other diseases and dysfunctions \cite{bologna1997three} --, credit card screening \cite{setiono2011rule}, intrusion detection systems \cite{hofmann2003rule}, keyword extraction \cite{azcarraga2012keyword}, and space mission data prediction~\cite{sabbatini22LPFSKE}.
 
@@ -104,36 +104,9 @@ Because of the many SKE techniques available in the literature, selecting the mo
 %
 Difficulties may arise because of the intrinsic design choices behind each extraction algorithm.
 %
-In fact, SKE algorithms may commonly target specific learning tasks (classification or regression), specific sorts of ML predictors (e.g. neural networks, SVM, linear models, etc.), or specific sorts of training data (e.g. continuous, categorical, or binary).
-%
-% The latter can be bypassed by adopting \emph{pedagogical} extractors, working upon any kind of BB without taking into consideration its kind (e.g., if it is a neural network, a support-vector machine or a random forest predictor), nor its internal architecture (e.g., number of layers and neurons in neural networks).
-% %
-% As for the input features, they can be mapped from one category to another by performing some manipulations.
-% %
-% Algorithms accepting numerical continuous features also work with numerical discrete and binary inputs.
-% %
-% Categorical features may be easily converted into numerical by an enumeration.
-% %
-% On the other hand, algorithms designed to accept discrete features obviously accept binary features too, and they may work on continuous data if they are previously transformed, e.g., via discretisation.
-% %
-% Finally, any kind of feature can be traced back to binary values by applying one-hot encoding to discrete (or discretised) features.
-% %
-% By taking in considerations all these observations, it is possible to consider as overcame issues related to the nature of input features.
-% %
-% A different situation describe the kind of the task at hand.
-%
-% The majority of existing SKE techniques are exclusively designed for supervised classification (e.g.,~\cite{craven1994using,craven1996extracting}) or regression (e.g.,~\cite{huysmans2006iter,gridex-extraamas2021}).
-% %
-% Only few exceptions may be applied to both of them, as \cart{}~\cite{breiman1984classification}.
-% %
-% The inability to switch from a task to another comes with two major disadvantages for users:
-% %
-% \begin{inlinelist}
-% 	\item the need to implement/learn how to tune a larger number of algorithms, since they are not general-purpose, and
-% 	\item the impossibility to assess the performance of a (new) procedure over a wide range of test applications.
-% \end{inlinelist}
+In fact, SKE algorithms may commonly target specific learning tasks (classification or regression), specific sorts of ML predictors (e.g.\ neural networks, SVM, linear models, etc.), or specific sorts of training data (e.g.\ continuous, categorical, or binary).
 
-In this paper, we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
+In this paper we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
 %
 Methods of such sort extract symbolic knowledge by querying black-box predictors as oracles, and by recursively partitioning the input spaces of these black boxes into several hypercubes---hence following a divide-et-impera approach.
 %
@@ -145,47 +118,31 @@ Accordingly, the contribution of this paper is manifold.
 %
 First, we provide a general and abstract description of any hypercube-based SKE workflow.
 %
-Second, we compare existing hypercube-based methods (e.g. \iter{}~\cite{huysmans2006iter} and \gridex{}~\cite{gridex-extraamas2021}) w.r.t. to the way they partition the input space, approximate black-box decisions, and construct the extracted symbolic knowledge.
+Second, we compare existing hypercube-based methods (e.g.\ \iter{}~\cite{huysmans2006iter} and \gridex{}~\cite{gridex-extraamas2021}) based on the way they partition the input space, approximate black-box decisions, and construct the extracted symbolic knowledge.
 %
 Third, we discuss how hypercube-based methods can be engineered to provide full support to supervised learning tasks---there including regression and classification ones.
 %
-Finally, to 
-%
-% In this paper we propose a generalisation of SKE techniques designed for regression tasks, aimed at extending the application of algorithms
-% %
-% \begin{inlinelist}
-% 	\item based on aggregate computations (e.g., averaging output values), and
-% 	\item adopting similarity-based criteria between input training data or output predictions (usually w.r.t.\ a user-defined threshold).
-% \end{inlinelist}
-% %
-% Under this perspective, \iter{}~\cite{huysmans2006iter} and \gridex{}~\cite{gridex-extraamas2021} are perfect examples.
-% %
-% Thus, we 
-demonstrate the versatility of hypercube-based methods, we analyse disparate SKE scenarios via the \psyke{} framework~\cite{psyke-woa2021,psyke-ia2022,psyke-extraamas2022}---that is, a platform combining SKE and Semantic Web to provide human-interpretability and intelligent agent-interoperability for BB-based machine learning tasks.
-%
-% Finally, we push forward our considerations to overcome another limitation of SKE techniques for regression, that is the constant output value provided by many of them, introducing an undesired discretisation of the predictions and thus a possible worsening of the predictive performance.
-%
-% We show that it is possible to obtain better results by generalising these algorithms according to our method in order to obtain outputs in the form of linear combination of the input variables.
+Finally, to demonstrate the versatility of hypercube-based methods, we analyse disparate SKE scenarios via the \psyke{} framework~\cite{psyke-woa2021,psyke-ia2022,psyke-extraamas2022}---that is, a platform combining SKE and Semantic Web to provide human-interpretability and intelligent agent-interoperability for BB-based machine learning tasks.
 
 The remainder of this paper is organised as follows.
 %
-\Cref{sec:state} describes the state of the art for SKE as well as some background notions to fully understand the work.
+\xs{state} describes the state of the art for SKE as well as some background notions to fully understand the work.
 %
-\Cref{sec:contribution} presents our model for hypercube-based methods and compares the most relevant methods from the literature, which are then exemplified in \Cref{sec:experiments}.
+\xs{contribution} presents our model for hypercube-based methods and compares the most relevant methods from the literature, which are then exemplified in \xs{experiments}.
 %
-Finally, conclusions are drawn in \Cref{sec:conclusions}.
+Finally, conclusions are drawn in \xs{conclusions}.
 
-\section{State of the Art}\label{sec:state}
+\section{State of the Art}\labelsec{state}
 
-In the following we provide details about the state of the art for symbolic knowledge extraction and the \psyke{} platform.
+In the remainder of this section we provide readers with some details about the state of the art for symbolic knowledge extraction (\xss{extraction}) and the \psyke{} platform (\xss{psyke}).
 
-\subsection{Knowledge Extraction}\label{ssec:extraction}
+\subsection{Knowledge Extraction}\labelssec{extraction}
 
 Computational systems are considered \emph{interpretable} when humans are able to easily understand its operation and outcomes~\cite{agentbasedxai-aamas2020}.
 %
 However, nowadays decision support systems often rely on ML models having excellent predictive capabilities at the expense of interpretability.
 %
-These \emph{sub-symbolic} predictors of increasing complexity, that learn input-output relations from data and store them as internal parameters, do not provide any kind of \emph{symbolic} representation of the acquired knowledge, thus lacking of an interpretable representation to the benefit of human users.
+These \emph{sub-symbolic} predictors of growing complexity, which learn input-output relations from data and store them as internal parameters, do not provide any kind of \emph{symbolic} representation of the acquired knowledge, thus lacking of an interpretable representation to the benefit of human users.
 %
 ML algorithms are defined as \emph{black boxes} for this reason~\cite{Lipton2018}.
 
@@ -195,9 +152,7 @@ The \xai{} community, indeed, have proposed a number of means to produce \emph{e
 %
 Amongst the proposals there are methods to extract lists~\cite{craven1994using,huysmans2006iter,gridex-extraamas2021} or trees~\cite{craven1996extracting,breiman1984classification} of logic rules, usually if-then-else, \mofn{} or fuzzy.
 %
-SKE is of particular importance also for another reason.
-%
-Indeed, it may enable further manipulations, for instance to merge the \emph{know-how} of different BB models \cite{xmas-aiiot2019}.
+SKE is particularly important also for another reason: it may enable further manipulations, for instance to merge the \emph{know-how} of different BB models \cite{xmas-aiiot2019}.
 
 Knowledge extraction algorithms can be categorised along three orthogonal dimensions~\cite{xaisurvey-ia14}:
 %
@@ -207,7 +162,7 @@ Knowledge extraction algorithms can be categorised along three orthogonal dimens
     \item\label{item:category:translucency} the supported underlying ML models, usually known as \emph{translucency}.
 \end{inlinelist}
 
-Supported tasks (\cref{item:category:learning-task}) are usually supervised classification or regression.
+Supported tasks -- \cref{item:category:learning-task} -- are usually supervised classification or regression.
 %
 To the best of our knowledge, so far only supervised machine learning tasks have been considered by SKE, thus neglecting unsupervised or reinforcement learning tasks.
 %
@@ -215,7 +170,7 @@ A cluster of SKE algorithms can only explain BB classifiers -- e.g.\ Rule-extrac
 %
 Finally, a little subset of SKE techniques are able to handle both tasks, as for the case of \textsc{G-Rex}~\cite{grex-icdm2008} and \cart~\cite{breiman1984classification}.
 
-As for the shape of the output knowledge (\cref{item:category:knowledge-form}), decision rules \cite{freitas2014comprehensible,huysmans2011empirical,murphy1991id2} and trees \cite{quinlan1993c4,simplifyingdt-ijmms27} are usually considered the most human-understandable ways to represent knowledge.
+As for the shape of the output knowledge -- \cref{item:category:knowledge-form} --, decision rules \cite{freitas2014comprehensible,huysmans2011empirical,murphy1991id2} and trees \cite{quinlan1993c4,simplifyingdt-ijmms27} are usually considered the most human-understandable ways to represent knowledge.
 %
 For this reason the majority of SKE methods produce one of these two structures as output.
 %
@@ -227,7 +182,7 @@ A further categorisation may be performed w.r.t.\ the kind of predicates contain
 %
 In particular, it is possible to observe conjunctions or disjunctions of inequalities (e.g.\ $x_i \gtrless c$) as well as inclusions in or exclusions from intervals (e.g.\ $x_i \in [l, u]$) for numerical data.
 %
-Categorical data are usually associated to equalities (e.g.\ $x_i = c$) and set-inclusions (e.g., $x_i \in \{c_1, c_2, \ldots \}$).
+Categorical data are usually associated to equalities (e.g.\ $x_i = c$) and set-inclusions (e.g.\ $x_i \in \{c_1, c_2, \ldots \}$).
 %
 \mofn{} or fuzzy rules are other available alternatives for boolean/discrete or continuous data, respectively.
 
@@ -271,31 +226,14 @@ Classifiers are usually evaluated via accuracy, precision, recall, and F$_1$ sco
 %
 Conversely, common metrics for regressors are the mean absolute/squared error (MAE/MSE) and the R${^2}$ score.
 
-%\paragraph{\cart}\label{par:cart}
-%
-%\cart{}~\cite{breiman1984classification} is an algorithm building decision trees for classification or regression tasks.
-%%
-%\cart{} is not properly a SKE procedure, but it is possible to apply it to BB predictions instead of actual data, in order to obtain an interpretable ML predictor mimicking the underling BB.
-%%
-%Since \cart{} produces a tree, it is straightforward to convert it into a rule tree, since each tree node corresponds to a constraint on an input variable and, consequently, each path from the root to leaves constitutes a single human-interpretable rule to perform classification or regression.
-%%
-%The \cart{} algorithm can be summarised as follows:
-%%
-%\begin{inlinelist}
-%	\item initialise the root node of the tree;
-%	\item find optimal splits to add nodes (internal and leaves) accordingly;
-%	\item terminate the algorithm on the basis of one or more criteria---e.g., amount of rules or tree depth.
-%\end{inlinelist}
-%%
-%Pruning techniques may be exploited after the extraction to reduce the number of leaves and, thus, of output rules.
 
-\subsection{\psyke}\label{ssec:psyke}
+\subsection{\psyke}\labelssec{psyke}
 
 \begin{figure}
 \centering
-	\includegraphics[width=.9\linewidth]{figures/Psyke.pdf}
+	\includegraphics[width=\linewidth]{figures/Psyke.pdf}
 	\caption{\psyke{} design.}
-	\label{fig:psyke-design}
+	\labelfig{psyke-design}
 \end{figure}
 
 \input{tables/tab-algos.tex}
@@ -306,9 +244,9 @@ It can be exploited to obtain logic rules from BB classifiers and regressors via
 %
 Its unified API allow users to select the most adequate procedure with few lines of code, also allowing fast comparison between different alternatives.
 %
-At the time of writing, \psyke{} supports 6 state-of-the-art SKE algorithms, reported on the top of \Cref{fig:psyke-design} (see \Cref{tab:psyke} for further details), allowing researchers and data scientists to exploit them without the need to implement and test them.
+At the time of writing, \psyke{} supports 6 state-of-the-art SKE algorithms, reported on the top of \xf{psyke-design} (see \xt{psyke} for further details), allowing researchers and data scientists to exploit them without the need to implement and test them.
 
-As shown in \Cref{fig:psyke-design}, the \psyke{} design is developed around the notion of \emph{extractor}, intended as any algorithm accepting as input a ML predictor (classifier or regressor) together with the data set used to train it, and providing as output a \emph{theory} of \emph{logic} rules extracted from the predictor.
+As shown in \xf{psyke-design}, the \psyke{} design is developed around the notion of \emph{extractor}, intended as any algorithm accepting as input a ML predictor (classifier or regressor) together with the data set used to train it, and providing as output a \emph{theory} of \emph{logic} rules extracted from the predictor.
 %
 \psyke{} extractors need additional information about the data set to give more human-interpretability to the extracted knowledge.
 In particular, a schema of the data set can be given as input to formally describe input and output feature names and types.
@@ -325,13 +263,13 @@ As for the knowledge provided in output by extractors, it is possible to choose 
 %
 Input data as well may follow Semantic Web encoding, so \psyke{} extractors accept tabular data or knowledge graphs stored in OWL ontologies.
 
-\section{Hypercube-based knowledge extractors}\label{sec:contribution}
+\section{Hypercube-based knowledge extractors}\labelsec{contribution}
 
-We provide in this Section a general hypercube-based extractor model.
+In this section we present a general hypercube-based extractor model (\xss{unified-model}).
 %
-We then delve into the details of different algorithms from the literature, discussing how they match the model.
+We then delve into the details of different algorithms from the literature, discussing how they match the model (\xss{existing-methods}).
 
-\subsection{Unified Model}
+\subsection{Unified Model}\labelssec{unified-model}
 
 Hypercube-base extraction methods are \emph{pedagogical} extraction procedures which can operate on trained ML predictors of any sort.
 %
@@ -348,7 +286,7 @@ to be read as ``if the input vector $\mathbf{x} \in \mathcal{X}$ is in some hype
 %
 Note that each hypercube $H_i$ is a partition of the input space $\mathcal{X}$, and $f_i$ is the function approximating $P$ outcomes related to that hypercube (could be a costant, a linear function, etc.), i.e.: $f_i(\mathbf{x}) \approx P(\mathbf{x}),~\forall \mathbf{x} \in H_i$.
 
-Without entering technical details, hypercube-based extraction procedures should then attempt to select hypercubes and local approximation functions in such a way as to maximise the fidelity of the overall rule set/list w.r.t. $P$.
+Hypercube-based extraction procedures should then attempt to select hypercubes and local approximation functions so as to maximise the fidelity of the overall rule set/list w.r.t.\ $P$.
 %
 Accordingly, they follow a pretty linear workflow, which may be roughly summarised in 3 steps, namely:
 %
@@ -366,9 +304,7 @@ Accordingly, they follow a pretty linear workflow, which may be roughly summaris
 	\item creating a rule set where each rule \emph{concisely} represents the behaviour of $P$ in $H_i$ via $f_i$.
 \end{enumerate}
 %
-% It is important to notice that hypercube-based extractors produce as output a predictive rule per found partition.
-
-In the following, we delve into the details of all such phases.
+In the following, we delve into the details of all the aforementioned phases.
 
 \subsubsection{Input space partitioning}
 
@@ -382,9 +318,9 @@ Input space partitioning is a recursive computation aimed at finding the optimal
 	\item minimising the predictive error correlated to each partition.
 \end{inlinelist}
 
-These conditions cannot be all simultaneously satisfied, especially when dealing with high-dimensional data sets.
+These conditions cannot be all satisfied simultaneously, especially when dealing with high-dimensional data sets.
 %
-For such a reason, some requirements may be relaxed.
+Thus, some requirements may be relaxed.
 %
 For instance, the input space coverage may be limited only to \emph{interesting} hypercubes, neglecting the others.
 %
@@ -419,8 +355,6 @@ Accordingly, here we delve into the details of how to assess
 	\item similarity amongst data points from \emph{contiguous} hypercubes, as well as
 	\item predictive errors between a candidate rule and the underlying predictor.
 \end{inlinelist}
-%
-%can be assessed in many different scenarios.
 
 \subparagraph{Similarity amongst instances}
 
@@ -471,7 +405,7 @@ In other words, $H_1$ and $H_2$ are output-similar if it is possible to
 
 \input{figures/fig-gen-sim.tex}
 
-For instance, in \Cref{fig:general-sim} we report examples of similarity assessments calculated for a generalised extractor applied to a classification task (\Cref{fig:gs1}) and to a regression task (\Cref{fig:gs2,fig:gs3}).
+For instance, in \xf{general-sim} we report examples of similarity assessments calculated for a generalised extractor applied to a classification task (\xf{gs1}) and to a regression task (\xff{gs2}{gs3}).
 %
 Figures concerning the regression task represent constant and non-constant extractor outputs, respectively.
 %
@@ -483,9 +417,9 @@ Possible adjacent hypercubes to be joined to them are represented as hypercubes 
 %
 Adjacent hypercubes that are similar to the hypercubes to be expanded are represented with hatched background.
 %
-It is worth noting that for the example depicted in \Cref{fig:gs2} a similarity threshold $\theta$ equal to 5.0 has been chosen.
+It is worth noting that for the example depicted in \xf{gs2} a similarity threshold $\theta$ equal to 5.0 has been chosen.
 %
-In \Cref{fig:gs3} the predictive errors corresponding to the adjacent hypercubes as well as the calculated errors of the possible merged regions are omitted for the clarity of the image.
+In \xf{gs3} the predictive errors corresponding to the adjacent hypercubes as well as the calculated errors of the possible merged regions are omitted for the clarity of the image.
 
 \subparagraph{Predictive error assessment}
 
@@ -505,9 +439,9 @@ where $\text{mae}(R, D)$ and $\text{accuracy}(R, D)$ are the mean absolute error
 
 \input{figures/fig-gen-err.tex}
 
-In \Cref{fig:general-error} we report some examples of predictive errors measured for a generalised extractor by assuming a 2-dimensional data set with continuous input features both ranging in the [0, 5] interval.
+In \xf{general-error} we report some examples of predictive errors measured for a generalised extractor by assuming a 2-dimensional data set with continuous input features both ranging in the [0, 5] interval.
 %
-The Figure represents a classification task and two regression tasks.
+The figure represents a classification task and two regression tasks.
 %
 The first regression task is approximated by the extractor with constant outputs, whereas the second is associated with non-constant outputs.
 %
@@ -557,7 +491,7 @@ Again, which option is better really depends on the learning task the underlying
 
 \input{figures/fig-gen-pred.tex}
 
-In \Cref{fig:general-pred}, we report examples of predictions provided by a generalised extractor.
+In \xf{general-pred}, we report examples of predictions provided by a generalised extractor.
 %
 As for the previous examples, a 2-dimensional data set with continuous input features both ranging in the [0, 5] interval is assumed.
 %
@@ -565,7 +499,7 @@ The Figure shows a classification task and two regression tasks, where the forme
 %
 The background colour represents the output provided by the extractor.
 
-\subsubsection{Output rules set creation}\label{ssec:rule}
+\subsubsection{Output rules set creation}\labelssec{rule}
 
 After selecting a set of input space regions and one output decision for each of them, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
 %
@@ -583,13 +517,13 @@ Thus, extracted human-readable logic rules generally have the following format:
 %
 where $O$ is the output decision and $X_1, X_2, ..., X_n$ are input variables assuming values included in the intervals described by corresponding lower-bounds $l_i$ and upper-bounds $u_i$.
 
-\subsection{Comparison of Existing Methods}
+\subsection{Comparison of Existing Methods}\labelssec{existing-methods}
 
-In the following a comparison between the hypercube-based SKE algorithms cited in \Cref{sec:experiments} -- namely \iter{} and \gridex{} -- is provided to give a practical demonstration of our methodology.
+In the following a comparison between the hypercube-based SKE algorithms cited in \xs{experiments} -- namely \iter{} and \gridex{} -- is provided to give a practical demonstration of our methodology.
 %
 Differences in the input space partitioning and in the decision approximation are highlighted in particular.
 %
-Output rules are lists of logic rules in both cases, following the convention described in \Cref{ssec:rule}.
+Output rules are lists of logic rules in both cases, following the convention described in \xf{rule}.
 %
 It worths noting that both algorithms assume input features to be continuous and may be applied to any kind of BB predictor, being pedagogical SKE methods.
 
@@ -601,9 +535,9 @@ The expansion may terminate also if it is not possible to further expand the hyp
 %
 In those cases additional cubes may be created to cover the remaining space.
 
-\iter{} has been designed limitedly to regression tasks and it performs averaging operations to associate output values to hypercubes.
+\iter{} is limited to regression tasks by design, and performs averaging operations to associate output values to hypercubes.
 %
-Indeed, for each cube, \iter{} selects all the training samples inside it and calculates the mean prediction by using the underlying BB as an oracle.
+For each cube, \iter{} selects all the training samples inside it and calculates the mean prediction by using the underlying BB as an oracle.
 %
 If the training samples are not enough to satisfy the minimum amount specified by the user, extra random samples are generated and predicted together with the others.
 
@@ -619,7 +553,7 @@ The \gridex{} algorithm~\cite{gridex-extraamas2021} may be considered as an exte
 %
 \gridex{} achieves this goal because it is exhaustive by design.
 %
-Differently from \iter{}, \gridex{} adopts a top-down approach to split the input feature space into hypercubes.
+Unlike \iter{}, \gridex{} adopts a top-down approach to split the input feature space into hypercubes.
 %
 It iteratively partitions the \emph{whole} space according to some defined strategy, marking at each iteration if the created partitions are \emph{negligible} (i.e., they contain no training samples, so they are discarded since it is not relevant to have rules associated to them), \emph{eligible} for further partitioning (if they contain samples that are not enough \emph{similar}), or \emph{permanent} (otherwise, if they contain similar training instances and, thus, these cubes should have a good predictive performance).
 %
@@ -641,13 +575,13 @@ Indeed, adjacent cubes are pairwise merged according to a similarity criterion o
 %
 The merging phase is iterative: at each step are merged only the two adjacent cubes resulting in the merged hypercube having the lowest standard deviation, and it terminates when it is not possible to further merge cubes without exceeding the standard deviation user-defined threshold.
 
-A first attempt to apply the generalisation proposed in this work to \gridex{}, in order to support regression rules as output decisions, can be found in the \gridrex{}~\cite{gridrex-kr2022} algorithm.
+A first \gridex{} generalisation supporting regression rules as output decisions has led to the \gridrex{} algorithm~\cite{gridrex-kr2022}.
 %
-Indeed, it is able to extract fully regressive rules, having as postconditions a linear combination of the input variables.
+\gridrex{} can extract fully regressive rules, with a linear combination of the input variables as a postcondition.
 %
-All the other details are identical to those described for \gridex{}, but it is able to achieve better predictive performance, fidelity and readability than \gridex{}.
+Even though all the other details are identical to \gridex{}, \gridrex{} is able to achieve better predictive performance, fidelity, and readability than \gridex{}.
 
-\section{Case Study: \psyke}\label{sec:experiments}
+\section{Case Study: \psyke}\labelsec{experiments}
 
 We exemplify the effectiveness of hypercube-based methods by considering the implementations of the \iter{} and \gridex{} extraction algorithms.
 %
@@ -655,13 +589,9 @@ Both methods are designed for regression and here applied to classification task
 %
 \cart{} is used as benchmark to assess the predictive performance of the modified extractors, since it is a state-of-the-art procedure directly applicable to data sets described by continuous features, without prior discretisation.
 %
-All the adopted implementations are included in the \psyke{} framework\footnotemark.
+All the adopted implementations are included in the \psyke{} framework.\footnote{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
 
-\footnotetext{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
-
-Experiments are executed on the well-known Iris data set\footnotemark, composed of 150 instances corresponding to Iris flower individuals.
-%
-\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}}
+Experiments are executed on the well-known Iris data set,\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}} composed of 150 instances corresponding to Iris flower individuals.
 %
 Each instance is described by 4 continuous input features (i.e., petal and sepal width and length of the exemplary) and a categorical class label (i.e., the species of the exemplary).
 %
@@ -692,13 +622,13 @@ Extraction techniques require an underlying BB to be used as an oracle.
 %
 For this reason we trained and compared several $k$-NN classifiers, with different values for the $k$ hyper-parameter.
 %
-Details about the accuracy and F$_1$ scores measured for each model are reported in \Cref{tab:predictor}.
+Details about the accuracy and F$_1$ scores measured for each model are reported in \xt{predictor}.
 %
 The best predictive performance is achieved by the 9-NN.
 %
 Consequently, in the following all the discussed extractors are applied to it.
 %
-The decision boundaries of the selected 9-NN are reported in \Cref{fig:knn}.
+The decision boundaries of the selected 9-NN are reported in \xf{knn}.
 
 \input{tables/tab-predictor.tex}
 
@@ -708,7 +638,7 @@ The decision boundaries of the selected 9-NN are reported in \Cref{fig:knn}.
 
 The \cart{} extractor is applied to the 9-NN classifier to extract human-intelligible knowledge in Prolog syntax, without discretising the input data set.
 %
-Differently from \iter{} and \gridex{}, \cart{} is able to work upon discretised data sets too.
+Unlike \iter{} and \gridex{}, \cart{} is able to work upon discretised data sets too.
 %
 Training the model with a maximum leaf amount of 3 gives the following theory, composed of 3 rules---namely, one per each possible class of the Iris data set.
 
@@ -716,9 +646,9 @@ Training the model with a maximum leaf amount of 3 gives the following theory, c
 
 The theory is always exhaustive, since it is always possible to find a leaf classifying an instance.
 %
-Numerical assessments about the predictive performance and fidelity of the theory extracted with \cart{} are reported in \Cref{tab:cart}.
+Numerical assessments about the predictive performance and fidelity of the theory extracted with \cart{} are reported in \xt{cart}.
 %
-The input space partitioning induced by the theory is reported in \Cref{fig:cart}.
+The input space partitioning induced by the theory is reported in \xf{cart}.
 %
 In this example, only petal width and length are considered to assign class labels to input instances.
 
@@ -740,13 +670,13 @@ We test several hyper-parameter values in order to attain the rule list having t
 	\item the maximum number of iterations, fixed to 600.
 \end{inlinelist}
 
-The results of our experiments for \iter{} are reported in \Cref{tab:iter}.
+The results of our experiments for \iter{} are reported in \xt{iter}.
 %
 The best predictive performance, achieved with the parameters highlighted in bold font in the Table, corresponds to the following rules.
 %
 \prologimport{listings/iris-rules-iter.pl}
 %
-The input space partitioning induced by the extracted rules is shown in \Cref{fig:iter}.
+The input space partitioning induced by the extracted rules is shown in \xf{iter}.
 
 \subsection{\gridex{}}
 
@@ -767,7 +697,7 @@ We recall that fundamental hyper-parameters for \gridex{} are
 %
 As for the number of slices to be performed, adaptive strategies are preferred to fixed strategies.
 %
-Experiment results concerning \gridex{} are reported in \Cref{tab:gridex}.
+Experiment results concerning \gridex{} are reported in \xt{gridex}.
 %
 The best hyper-parameter values are highlighted in bold font.
 %
@@ -777,7 +707,7 @@ All the other dimensions are not split.
 %
 Input feature relevance is always scaled in the [0, 1] interval.
 %
-Corresponding output Prolog theory and input space partitioning are reported in the following and in \Cref{fig:gridex}, respectively.
+Corresponding output Prolog theory and input space partitioning are reported in the following and in \xf{gridex}, respectively.
 
 \prologimport{listings/iris-rules-gridex.pl}
 
@@ -793,7 +723,7 @@ In this manner all the non-relevant antecedents are dropped from the output theo
 
 \input{figures/fig-extractors.tex}
 
-In this Subsection we compare the results of \cart{}, \iter{} and \gridex{} applied to the Iris data set, all summarised in \Cref{fig:extractors}.
+In this Subsection we compare the results of \cart{}, \iter{}, and \gridex{} applied to the Iris data set, all summarised in \xf{extractors}.
 %
 Results are compared on the basis of readability, fidelity and predictive performance, other than the decision boundaries induced by the extracted rules.
 %
@@ -807,9 +737,9 @@ The decision boundaries provided by \gridex{} and \iter{} are more similar to th
 %
 A similar reasoning may be performed about the extractors' fidelity, equal to 0.95 for \cart{} and to 0.97 for \iter{} and \gridex{}.
 
-It is worth noting that \gridex{} does not provide a classification rule for a small input space region, since it finds that region as negligible (because there are no data set instances belonging to it).
+It is worth noting that \gridex{} does not provide a classification rule for a small input space region, since it finds that region as negligible (since no data set instances belong to it).
 
-\section{Conclusions}\label{sec:conclusions}
+\section{Conclusions}\labelsec{conclusions}
 
 In this paper we generalise a class of SKE techniques, namely hypercube-based methods, to make them suitable for classification tasks as well as regression tasks.
 %
@@ -817,7 +747,7 @@ We do so by proposing a common model for these methods and by concretely impleme
 %
 The proposed generalised model considers in which ways it is possible to relax algorithmic patterns currently adopted by hypercube-based SKE extractors in order to widen their applicability scopes.
 %
-Our future works will be focused on extending the proposed generalisation to a wider class of SKE techniques, to enable a higher degree of usability for SKE techniques existing in the literature.
+Our future works will focus on extending the proposed generalisation to a wider class of SKE techniques, to enable a higher degree of usability for SKE techniques existing in the literature.
 
 \begin{acknowledgments}
 	This paper has been partially supported by
