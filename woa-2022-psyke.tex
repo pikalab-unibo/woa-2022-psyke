@@ -63,7 +63,7 @@ More generally, we propose a common generalised model for hypercube-based method
 %
 % We show that further manipulations may be horizontally enabled for a large class of knowledge extractors without the need to revise their algorithms, but only adding our proposed generalisation.
 %
-We also report as a concrete example the implementation of the proposed generalisation in the \psyke{} framework.
+% We also report as a concrete example the implementation of the proposed generalisation in the \psyke{} framework.
 \end{abstract}
 
 %%
@@ -122,19 +122,19 @@ Second, we compare existing hypercube-based methods (e.g.\ \iter{}~\cite{huysman
 %
 Third, we discuss how hypercube-based methods can be engineered to provide full support to supervised learning tasks---there including regression and classification ones.
 %
-Finally, to demonstrate the versatility of hypercube-based methods, we analyse disparate SKE scenarios via the \psyke{} framework~\cite{psyke-woa2021,psyke-ia2022,psyke-extraamas2022}---that is, a platform combining SKE and Semantic Web to provide human-interpretability and intelligent agent-interoperability for BB-based machine learning tasks.
+% Finally, to demonstrate the versatility of hypercube-based methods, we analyse disparate SKE scenarios via the \psyke{} framework~\cite{psyke-woa2021,psyke-ia2022,psyke-extraamas2022}---that is, a platform combining SKE and Semantic Web to provide human-interpretability and intelligent agent-interoperability for BB-based machine learning tasks.
 
 The remainder of this paper is organised as follows.
 %
 \xs{state} describes the state of the art for SKE as well as some background notions to fully understand the work.
 %
-\xs{contribution} presents our model for hypercube-based methods and compares the most relevant methods from the literature, which are then exemplified in \xs{experiments}.
+\xs{contribution} presents our model for hypercube-based methods and compares the most relevant methods from the literature. %, which are then exemplified in \xs{experiments}.
 %
 Finally, conclusions are drawn in \xs{conclusions}.
 
 \section{State of the Art}\labelsec{state}
 
-In the remainder of this section we provide readers with some details about the state of the art for symbolic knowledge extraction (\xss{extraction}) and the \psyke{} platform (\xss{psyke}).
+In the remainder of this section we provide readers with some details about the state of the art for symbolic knowledge extraction. % (\xss{extraction}) and the \psyke{} platform (\xss{psyke}).
 
 \subsection{Knowledge Extraction}\labelssec{extraction}
 
@@ -226,42 +226,41 @@ Classifiers are usually evaluated via accuracy, precision, recall, and F$_1$ sco
 %
 Conversely, common metrics for regressors are the mean absolute/squared error (MAE/MSE) and the R${^2}$ score.
 
+% \subsection{\psyke}\labelssec{psyke}
 
-\subsection{\psyke}\labelssec{psyke}
+% \begin{figure}
+% \centering
+% 	\includegraphics[width=\linewidth]{figures/Psyke.pdf}
+% 	\caption{\psyke{} design.}
+% 	\labelfig{psyke-design}
+% \end{figure}
 
-\begin{figure}
-\centering
-	\includegraphics[width=\linewidth]{figures/Psyke.pdf}
-	\caption{\psyke{} design.}
-	\labelfig{psyke-design}
-\end{figure}
+% \input{tables/tab-algos.tex}
 
-\input{tables/tab-algos.tex}
+% The \psyke{}~\cite{psyke-woa2021,psyke-ia2022} software library is a Python framework providing general-purpose support to SKE.
+% %
+% It can be exploited to obtain logic rules from BB classifiers and regressors via several pedagogical extraction methods.
+% %
+% Its unified API allow users to select the most adequate procedure with few lines of code, also allowing fast comparison between different alternatives.
+% %
+% At the time of writing, \psyke{} supports 6 state-of-the-art SKE algorithms, reported on the top of \xf{psyke-design} (see \xt{psyke} for further details), allowing researchers and data scientists to exploit them without the need to implement and test them.
 
-The \psyke{}~\cite{psyke-woa2021,psyke-ia2022} software library is a Python framework providing general-purpose support to SKE.
-%
-It can be exploited to obtain logic rules from BB classifiers and regressors via several pedagogical extraction methods.
-%
-Its unified API allow users to select the most adequate procedure with few lines of code, also allowing fast comparison between different alternatives.
-%
-At the time of writing, \psyke{} supports 6 state-of-the-art SKE algorithms, reported on the top of \xf{psyke-design} (see \xt{psyke} for further details), allowing researchers and data scientists to exploit them without the need to implement and test them.
+% As shown in \xf{psyke-design}, the \psyke{} design is developed around the notion of \emph{extractor}, intended as any algorithm accepting as input a ML predictor (classifier or regressor) together with the data set used to train it, and providing as output a \emph{theory} of \emph{logic} rules extracted from the predictor.
+% %
+% \psyke{} extractors need additional information about the data set to give more human-interpretability to the extracted knowledge.
+% In particular, a schema of the data set can be given as input to formally describe input and output feature names and types.
 
-As shown in \xf{psyke-design}, the \psyke{} design is developed around the notion of \emph{extractor}, intended as any algorithm accepting as input a ML predictor (classifier or regressor) together with the data set used to train it, and providing as output a \emph{theory} of \emph{logic} rules extracted from the predictor.
-%
-\psyke{} extractors need additional information about the data set to give more human-interpretability to the extracted knowledge.
-In particular, a schema of the data set can be given as input to formally describe input and output feature names and types.
+% \psyke{} also exhibits utilities to manipulate the data set and perform feature engineering, for instance procedures to discretise or scale continuous features and to one-hot encode discrete/discretised features.
+% %
+% In addition, there are automatic procedures to select the optimal parameters for extractors, which manual tuning may be challenging for human users.
 
-\psyke{} also exhibits utilities to manipulate the data set and perform feature engineering, for instance procedures to discretise or scale continuous features and to one-hot encode discrete/discretised features.
-%
-In addition, there are automatic procedures to select the optimal parameters for extractors, which manual tuning may be challenging for human users.
-
-As for the knowledge provided in output by extractors, it is possible to choose between two options:
-\begin{inlinelist}
-	\item a Prolog theory composed of human-intelligible clauses, possibly simplified to ease readability;
-	\item an OWL ontology having agent-interpretable SWRL rules, to pursue interoperability between intelligent agents~\cite{psyke-extraamas2022}.
-\end{inlinelist}
-%
-Input data as well may follow Semantic Web encoding, so \psyke{} extractors accept tabular data or knowledge graphs stored in OWL ontologies.
+% As for the knowledge provided in output by extractors, it is possible to choose between two options:
+% \begin{inlinelist}
+% 	\item a Prolog theory composed of human-intelligible clauses, possibly simplified to ease readability;
+% 	\item an OWL ontology having agent-interpretable SWRL rules, to pursue interoperability between intelligent agents~\cite{psyke-extraamas2022}.
+% \end{inlinelist}
+% %
+% Input data as well may follow Semantic Web encoding, so \psyke{} extractors accept tabular data or knowledge graphs stored in OWL ontologies.
 
 \section{Hypercube-based knowledge extractors}\labelsec{contribution}
 
@@ -292,15 +291,15 @@ Accordingly, they follow a pretty linear workflow, which may be roughly summaris
 %
 \begin{enumerate}
 	\item partitioning the input space into disjoint hypercubes $H_1 \cup \ldots \cup H_n$, following a selected strategy and according to possible defined constraints;
-		% %
-	% \begin{itemize}
-	% 	\item e.g. one may be willing to minimise $n$ while maximising the size of each $H_i$
-	% \end{itemize}
+	%
+	\begin{itemize}
+		\item e.g. one may be willing to minimise $n$ while maximising the size of each $H_i$
+	\end{itemize}
 	\item approximating the prediction of $P$ for each hypercube $H_i$, via some function $f_i$; and
-	% %
-	% \begin{itemize}
-	% 	\item e.g. one may be willing to maximise the similarity among $P$ and $f_i$ in $H_i$
-	% \end{itemize}
+	%
+	\begin{itemize}
+		\item e.g. one may be willing to maximise the similarity among $P$ and $f_i$ in $H_i$
+	\end{itemize}
 	\item creating a rule set where each rule \emph{concisely} represents the behaviour of $P$ in $H_i$ via $f_i$.
 \end{enumerate}
 %
@@ -519,11 +518,13 @@ where $O$ is the output decision and $X_1, X_2, ..., X_n$ are input variables as
 
 \subsection{Comparison of Existing Methods}\labelssec{existing-methods}
 
-In the following a comparison between the hypercube-based SKE algorithms cited in \xs{experiments} -- namely \iter{} and \gridex{} -- is provided to give a practical demonstration of our methodology.
+In the following a comparison between the two hypercube-based SKE algorithms %cited in \xs{experiments} 
+-- namely \iter{} and \gridex{} -- is provided to give a practical demonstration of our methodology.
 %
 Differences in the input space partitioning and in the decision approximation are highlighted in particular.
 %
 Output rules are lists of logic rules in both cases, following the convention described in \xf{rule}.
+\gctodo{Sta figura che cos'è?}
 %
 It worths noting that both algorithms assume input features to be continuous and may be applied to any kind of BB predictor, being pedagogical SKE methods.
 
@@ -581,171 +582,173 @@ A first \gridex{} generalisation supporting regression rules as output decisions
 %
 Even though all the other details are identical to \gridex{}, \gridrex{} is able to achieve better predictive performance, fidelity, and readability than \gridex{}.
 
-\section{Case Study: \psyke}\labelsec{experiments}
+% \section{Case Study: \psyke}\labelsec{experiments}
 
-We exemplify the effectiveness of hypercube-based methods by considering the implementations of the \iter{} and \gridex{} extraction algorithms.
-%
-Both methods are designed for regression and here applied to classification tasks.
-%
-\cart{} is used as benchmark to assess the predictive performance of the modified extractors, since it is a state-of-the-art procedure directly applicable to data sets described by continuous features, without prior discretisation.
-%
-All the adopted implementations are included in the \psyke{} framework.\footnote{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
+% We exemplify the effectiveness of hypercube-based methods by considering the implementations of the \iter{} and \gridex{} extraction algorithms.
+% %
+% Both methods are designed for regression and here applied to classification tasks.
+% %
+% \cart{} is used as benchmark to assess the predictive performance of the modified extractors, since it is a state-of-the-art procedure directly applicable to data sets described by continuous features, without prior discretisation.
+% %
+% All the adopted implementations are included in the \psyke{} framework.\footnote{Code of experiments is available at \url{https://github.com/psykei/psyke-python}}
 
-Experiments are executed on the well-known Iris data set,\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}} composed of 150 instances corresponding to Iris flower individuals.
-%
-Each instance is described by 4 continuous input features (i.e., petal and sepal width and length of the exemplary) and a categorical class label (i.e., the species of the exemplary).
-%
-Three different species are present in the Iris data set (namely, Setosa, Virginica, and Versicolor) and they are equally balanced (50 individuals per species).
+% Experiments are executed on the well-known Iris data set,\footnotetext{\vurl{https://archive.ics.uci.edu/ml/datasets/iris}} composed of 150 instances corresponding to Iris flower individuals.
+% %
+% Each instance is described by 4 continuous input features (i.e., petal and sepal width and length of the exemplary) and a categorical class label (i.e., the species of the exemplary).
+% %
+% Three different species are present in the Iris data set (namely, Setosa, Virginica, and Versicolor) and they are equally balanced (50 individuals per species).
 
-The experiments are carried out as follows:
-%
-\begin{inlinelist}
-	\item the data set is randomly split into training and test sets, of equal size;
-	\item a $k$-nearest neighbour ($k$-NN) classifier is trained on the training set;
-	\item three different extractors are used to extract symbolic rules out of that classifier;
-	\item the predictive performance of both the classifier and the extracted rules are graphically compared -- in terms of decision boundaries --, and numerically assessed---in terms of accuracy and F$_1$ scores. In the case of the extracted rules, fidelity and readability measurements are performed as well.
-\end{inlinelist}
-%
-It worths noticing that the training set is used only to train the models.
-%
-Conversely, the test set is used only to assess the predictive performance of predictor and extractors.
-%
-Both sets are constant for each experiment, to better compare the performance under the same conditions.
-%
-The fidelity of the extracted rules (w.r.t.\ the predictor they have been extracted from) is assessed as well, via the same metrics adopted for the predictive performance.
-%
-Finally, the output knowledge readability is expressed as number of extracted rules.
+% The experiments are carried out as follows:
+% %
+% \begin{inlinelist}
+% 	\item the data set is randomly split into training and test sets, of equal size;
+% 	\item a $k$-nearest neighbour ($k$-NN) classifier is trained on the training set;
+% 	\item three different extractors are used to extract symbolic rules out of that classifier;
+% 	\item the predictive performance of both the classifier and the extracted rules are graphically compared -- in terms of decision boundaries --, and numerically assessed---in terms of accuracy and F$_1$ scores. In the case of the extracted rules, fidelity and readability measurements are performed as well.
+% \end{inlinelist}
+% %
+% It worths noticing that the training set is used only to train the models.
+% %
+% Conversely, the test set is used only to assess the predictive performance of predictor and extractors.
+% %
+% Both sets are constant for each experiment, to better compare the performance under the same conditions.
+% %
+% The fidelity of the extracted rules (w.r.t.\ the predictor they have been extracted from) is assessed as well, via the same metrics adopted for the predictive performance.
+% %
+% Finally, the output knowledge readability is expressed as number of extracted rules.
 
-\subsection{Predictor training}
+% \subsection{Predictor training}
 
-Extraction techniques require an underlying BB to be used as an oracle.
-%
-For this reason we trained and compared several $k$-NN classifiers, with different values for the $k$ hyper-parameter.
-%
-Details about the accuracy and F$_1$ scores measured for each model are reported in \xt{predictor}.
-%
-The best predictive performance is achieved by the 9-NN.
-%
-Consequently, in the following all the discussed extractors are applied to it.
-%
-The decision boundaries of the selected 9-NN are reported in \xf{knn}.
+% Extraction techniques require an underlying BB to be used as an oracle.
+% %
+% For this reason we trained and compared several $k$-NN classifiers, with different values for the $k$ hyper-parameter.
+% %
+% Details about the accuracy and F$_1$ scores measured for each model are reported in \xt{predictor}.
+% %
+% The best predictive performance is achieved by the 9-NN.
+% %
+% Consequently, in the following all the discussed extractors are applied to it.
+% %
+% The decision boundaries of the selected 9-NN are reported in \xf{knn}.
 
-\input{tables/tab-predictor.tex}
+% \input{tables/tab-predictor.tex}
 
-\subsection{\cart{}}
+% \subsection{\cart{}}
 
-\input{tables/tab-cart}
+% \input{tables/tab-cart}
 
-The \cart{} extractor is applied to the 9-NN classifier to extract human-intelligible knowledge in Prolog syntax, without discretising the input data set.
-%
-Unlike \iter{} and \gridex{}, \cart{} is able to work upon discretised data sets too.
-%
-Training the model with a maximum leaf amount of 3 gives the following theory, composed of 3 rules---namely, one per each possible class of the Iris data set.
+% The \cart{} extractor is applied to the 9-NN classifier to extract human-intelligible knowledge in Prolog syntax, without discretising the input data set.
+% %
+% Unlike \iter{} and \gridex{}, \cart{} is able to work upon discretised data sets too.
+% %
+% Training the model with a maximum leaf amount of 3 gives the following theory, composed of 3 rules---namely, one per each possible class of the Iris data set.
 
-\prologimport{listings/iris-rules-cart.pl}
+% \prologimport{listings/iris-rules-cart.pl}
 
-The theory is always exhaustive, since it is always possible to find a leaf classifying an instance.
-%
-Numerical assessments about the predictive performance and fidelity of the theory extracted with \cart{} are reported in \xt{cart}.
-%
-The input space partitioning induced by the theory is reported in \xf{cart}.
-%
-In this example, only petal width and length are considered to assign class labels to input instances.
+% The theory is always exhaustive, since it is always possible to find a leaf classifying an instance.
+% %
+% Numerical assessments about the predictive performance and fidelity of the theory extracted with \cart{} are reported in \xt{cart}.
+% %
+% The input space partitioning induced by the theory is reported in \xf{cart}.
+% %
+% In this example, only petal width and length are considered to assign class labels to input instances.
 
-\subsection{\iter{}}
+% \subsection{\iter{}}
 
-\input{tables/tab-iter}
+% \input{tables/tab-iter}
 
-The \iter{} algorithm has been applied as well to explain the 9-NN classifier.
-%
-We test several hyper-parameter values in order to attain the rule list having the highest possible predictive performance and fidelity.
-%
-\iter{} is based on the following hyper-parameters:
-%
-\begin{inlinelist}
-	\item the size for updating cubes, expressed as fraction of input dimension (i.e., 0.1 means a tenth of the interval between minimum and maximum values of each dimension);
-	\item the number of starting points, representing the initial hypercubes;
-	\item the minimum number of examples to consider in each cube;
-	\item the similarity threshold between adjacent cubes, that is not relevant for classification;
-	\item the maximum number of iterations, fixed to 600.
-\end{inlinelist}
+% The \iter{} algorithm has been applied as well to explain the 9-NN classifier.
+% %
+% We test several hyper-parameter values in order to attain the rule list having the highest possible predictive performance and fidelity.
+% %
+% \iter{} is based on the following hyper-parameters:
+% %
+% \begin{inlinelist}
+% 	\item the size for updating cubes, expressed as fraction of input dimension (i.e., 0.1 means a tenth of the interval between minimum and maximum values of each dimension);
+% 	\item the number of starting points, representing the initial hypercubes;
+% 	\item the minimum number of examples to consider in each cube;
+% 	\item the similarity threshold between adjacent cubes, that is not relevant for classification;
+% 	\item the maximum number of iterations, fixed to 600.
+% \end{inlinelist}
 
-The results of our experiments for \iter{} are reported in \xt{iter}.
-%
-The best predictive performance, achieved with the parameters highlighted in bold font in the Table, corresponds to the following rules.
-%
-\prologimport{listings/iris-rules-iter.pl}
-%
-The input space partitioning induced by the extracted rules is shown in \xf{iter}.
+% The results of our experiments for \iter{} are reported in \xt{iter}.
+% %
+% The best predictive performance, achieved with the parameters highlighted in bold font in the Table, corresponds to the following rules.
+% %
+% \prologimport{listings/iris-rules-iter.pl}
+% %
+% The input space partitioning induced by the extracted rules is shown in \xf{iter}.
 
-\subsection{\gridex{}}
+% \subsection{\gridex{}}
 
-\input{tables/tab-gridex}
+% \input{tables/tab-gridex}
 
-Finally, as last step of our experiments, the \gridex{} extractor is applied to the 9-NN classifier.
-%
-In this case as well different values for the hyper-parameters are been explored.
-%
-We recall that fundamental hyper-parameters for \gridex{} are
-%
-\begin{inlinelist}
-	\item the depth of the recursive partitioning (i.e., how many iterations);
-	\item the number of slices to perform at every iteration;
-	\item the error threshold used to decide if further divide a hypercube, fixed to 0.1 for all experiments;
-	\item the minimum number of examples to consider in each cube, here fixed to 1.
-\end{inlinelist}
-%
-As for the number of slices to be performed, adaptive strategies are preferred to fixed strategies.
-%
-Experiment results concerning \gridex{} are reported in \xt{gridex}.
-%
-The best hyper-parameter values are highlighted in bold font.
-%
-The semantics of adaptive splitting strategies described by the couple $(a, b)$ is the following: all input dimensions having relevance greater than $a$ are split into $b$ subregions at each iteration.
-%
-All the other dimensions are not split.
-%
-Input feature relevance is always scaled in the [0, 1] interval.
-%
-Corresponding output Prolog theory and input space partitioning are reported in the following and in \xf{gridex}, respectively.
+% Finally, as last step of our experiments, the \gridex{} extractor is applied to the 9-NN classifier.
+% %
+% In this case as well different values for the hyper-parameters are been explored.
+% %
+% We recall that fundamental hyper-parameters for \gridex{} are
+% %
+% \begin{inlinelist}
+% 	\item the depth of the recursive partitioning (i.e., how many iterations);
+% 	\item the number of slices to perform at every iteration;
+% 	\item the error threshold used to decide if further divide a hypercube, fixed to 0.1 for all experiments;
+% 	\item the minimum number of examples to consider in each cube, here fixed to 1.
+% \end{inlinelist}
+% %
+% As for the number of slices to be performed, adaptive strategies are preferred to fixed strategies.
+% %
+% Experiment results concerning \gridex{} are reported in \xt{gridex}.
+% %
+% The best hyper-parameter values are highlighted in bold font.
+% %
+% The semantics of adaptive splitting strategies described by the couple $(a, b)$ is the following: all input dimensions having relevance greater than $a$ are split into $b$ subregions at each iteration.
+% %
+% All the other dimensions are not split.
+% %
+% Input feature relevance is always scaled in the [0, 1] interval.
+% %
+% Corresponding output Prolog theory and input space partitioning are reported in the following and in \xf{gridex}, respectively.
 
-\prologimport{listings/iris-rules-gridex.pl}
+% \prologimport{listings/iris-rules-gridex.pl}
 
-Also in this case only one input feature is considered to draw predictions.
-%
-The partitioning is exhaustive w.r.t.\ the data set, however a small input space region is neglected since the algorithm observed no instances included in it.
-%
-Differently from \iter{}, \gridex{} is able to detect input dimensions that do not affect the classification.
-%
-In this manner all the non-relevant antecedents are dropped from the output theory, resulting in a higher human-readability.
+% Also in this case only one input feature is considered to draw predictions.
+% %
+% The partitioning is exhaustive w.r.t.\ the data set, however a small input space region is neglected since the algorithm observed no instances included in it.
+% %
+% Differently from \iter{}, \gridex{} is able to detect input dimensions that do not affect the classification.
+% %
+% In this manner all the non-relevant antecedents are dropped from the output theory, resulting in a higher human-readability.
 
-\subsection{Discussion}
+% \subsection{Discussion}
 
-\input{figures/fig-extractors.tex}
+% \input{figures/fig-extractors.tex}
 
-In this Subsection we compare the results of \cart{}, \iter{}, and \gridex{} applied to the Iris data set, all summarised in \xf{extractors}.
-%
-Results are compared on the basis of readability, fidelity and predictive performance, other than the decision boundaries induced by the extracted rules.
-%
-As for readability, all the extractors are equivalent w.r.t.\ the number of rules, since they are able to extract one predictive rule per output class.
-%
-Conversely, the readability of \iter{} is hindered by the number of antecedents per rule, since it produces a constraint for each input dimension.
-%
-Under this perspective, \cart{} and \gridex{} are able to keep amongst the rules' conditions only those involving relevant features to perform the classification, resulting in a fourth of the total amount of antecedents w.r.t.\ \iter{}.
+% In this Subsection we compare the results of \cart{}, \iter{}, and \gridex{} applied to the Iris data set, all summarised in \xf{extractors}.
+% %
+% Results are compared on the basis of readability, fidelity and predictive performance, other than the decision boundaries induced by the extracted rules.
+% %
+% As for readability, all the extractors are equivalent w.r.t.\ the number of rules, since they are able to extract one predictive rule per output class.
+% %
+% Conversely, the readability of \iter{} is hindered by the number of antecedents per rule, since it produces a constraint for each input dimension.
+% %
+% Under this perspective, \cart{} and \gridex{} are able to keep amongst the rules' conditions only those involving relevant features to perform the classification, resulting in a fourth of the total amount of antecedents w.r.t.\ \iter{}.
 
-The decision boundaries provided by \gridex{} and \iter{} are more similar to those produced by the underlying $k$-NN, but no sensible difference in the classification accuracy is noticeable, since all extractors present a score between 0.94 and 0.95 (we recall that the 9-NN has an accuracy score equal to 0.97).
-%
-A similar reasoning may be performed about the extractors' fidelity, equal to 0.95 for \cart{} and to 0.97 for \iter{} and \gridex{}.
+% The decision boundaries provided by \gridex{} and \iter{} are more similar to those produced by the underlying $k$-NN, but no sensible difference in the classification accuracy is noticeable, since all extractors present a score between 0.94 and 0.95 (we recall that the 9-NN has an accuracy score equal to 0.97).
+% %
+% A similar reasoning may be performed about the extractors' fidelity, equal to 0.95 for \cart{} and to 0.97 for \iter{} and \gridex{}.
 
-It is worth noting that \gridex{} does not provide a classification rule for a small input space region, since it finds that region as negligible (since no data set instances belong to it).
+% It is worth noting that \gridex{} does not provide a classification rule for a small input space region, since it finds that region as negligible (since no data set instances belong to it).
 
 \section{Conclusions}\labelsec{conclusions}
 
 In this paper we generalise a class of SKE techniques, namely hypercube-based methods, to make them suitable for classification tasks as well as regression tasks.
 %
-We do so by proposing a common model for these methods and by concretely implementing our generalisation in the \psyke{} framework.
+We do so by proposing a common model for these methods, %and by concretely implementing our generalisation in the \psyke{} framework.
 %
-The proposed generalised model considers in which ways it is possible to relax algorithmic patterns currently adopted by hypercube-based SKE extractors in order to widen their applicability scopes.
+% The proposed generalised model considers in which ways it is possible to 
+%relax 
+where algorithmic patterns currently adopted by hypercube-based SKE algorithms are relaxed, in order to widen their applicability scopes.
 %
 Our future works will focus on extending the proposed generalisation to a wider class of SKE techniques, to enable a higher degree of usability for SKE techniques existing in the literature.
 
