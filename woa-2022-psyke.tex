@@ -16,12 +16,12 @@
 \conference{WOA 2022: 23rd Workshop From Objects to Agents, September 1--2, Genova, Italy}
 
 %%
-\title{Hypercube-based methods for symbolic knowledge extraction: Towards a unified model}
+\title{Hypercube-Based Methods for Symbolic Knowledge Extraction: Towards a Unified Model}
 
 %%
 \author[1]{Federico Sabbatini}[%
 orcid=0000-0002-0532-6777,
-email=f.sabbatini1@studio.uniurb.it,
+email=f.sabbatini1@campus.uniurb.it,
 url=http://federicosabbatini.apice.unibo.it
 ]\cormark[1]
 \address[1]{Dipartimento di Scienze Pure e Applicate (DiSPeA), Universit\`a di Urbino, Italy}
@@ -104,11 +104,11 @@ Because of the many SKE techniques available in the literature, selecting the mo
 %
 Difficulties may arise because of the intrinsic design choices behind each extraction algorithm.
 %
-In fact, SKE algorithms may commonly target specific learning tasks (classification or regression), specific sorts of ML predictors (e.g.\ neural networks, SVM, linear models, etc.), or specific sorts of training data (e.g.\ continuous, categorical, or binary).
+In fact, SKE algorithms may commonly target specific learning tasks (classification or regression), specific sorts of ML predictors (e.g.\ neural networks, support-vector machines, linear models, etc.), or specific sorts of training data (e.g.\ continuous, categorical, or binary).
 
 In this paper we focus upon a quite general class of SKE techniques, namely \emph{hypercube-based} methods.
 %
-Methods of such sort extract symbolic knowledge by querying black-box predictors as oracles, and by recursively partitioning the input spaces of these black boxes into several hypercubes---hence following a divide-et-impera approach.
+Methods of such sort extract symbolic knowledge by querying black-box predictors as oracles, and by recursively partitioning the input spaces of these black boxes into several hypercubes---hence following a \emph{divide-et-impera} approach.
 %
 Despite being commonly considered regression-specific, we show that hypercube-based SKE methods are flexible enough to deal with classification problems as well.
 %
@@ -134,7 +134,7 @@ Finally, conclusions are drawn in \xs{conclusions}.
 
 \section{State of the Art}\labelsec{state}
 
-In the remainder of this section we provide readers with some details about the state of the art for symbolic knowledge extraction. % (\xss{extraction}) and the \psyke{} platform (\xss{psyke}).
+In this section we provide readers with some details about the state of the art for symbolic knowledge extraction. % (\xss{extraction}) and the \psyke{} platform (\xss{psyke}).
 
 \subsection{Knowledge Extraction}\labelssec{extraction}
 
@@ -164,8 +164,6 @@ Knowledge extraction algorithms can be categorised along three orthogonal dimens
 
 Supported tasks -- \cref{item:category:learning-task} -- are usually supervised classification or regression.
 %
-To the best of our knowledge, so far only supervised machine learning tasks have been considered by SKE, thus neglecting unsupervised or reinforcement learning tasks.
-%
 A cluster of SKE algorithms can only explain BB classifiers -- e.g.\ Rule-extraction-as-learning~\cite{craven1994using}, \trepan~\cite{craven1996extracting} and others \cite{barakat2005eclectic,martens2007comprehensible} --, while a different cluster is designed to support BB regressors---e.g., \iter~\cite{huysmans2006iter}, \gridex~\cite{gridex-extraamas2021}, \gridrex{}~\cite{gridrex-kr2022} and others~\cite{setiono2002extraction,schmitz1999ann,saito2002extracting}.
 %
 Finally, a little subset of SKE techniques are able to handle both tasks, as for the case of \textsc{G-Rex}~\cite{grex-icdm2008} and \cart~\cite{breiman1984classification}.
@@ -184,9 +182,9 @@ In particular, it is possible to observe conjunctions or disjunctions of inequal
 %
 Categorical data are usually associated to equalities (e.g.\ $x_i = c$) and set-inclusions (e.g.\ $x_i \in \{c_1, c_2, \ldots \}$).
 %
-\mofn{} or fuzzy rules are other available alternatives for boolean/discrete or continuous data, respectively.
+\mofn{} or fuzzy rules are other available alternatives.
 
-Finally, the translucency dimension (\cref{item:category:translucency}) represents the strategy adopted by the SKE algorithm to obtain interpretable knowledge from a BB.
+Finally, the translucency dimension -- \cref{item:category:translucency} -- represents the strategy adopted by the SKE algorithm to obtain interpretable knowledge from a BB.
 %
 In particular, extractors may be \emph{decompositional} or \emph{pedagogical} \cite{andrews1995survey,xaisurvey-ia14}. % or \emph{eclectic}.
 %
@@ -262,15 +260,15 @@ Conversely, common metrics for regressors are the mean absolute/squared error (M
 % %
 % Input data as well may follow Semantic Web encoding, so \psyke{} extractors accept tabular data or knowledge graphs stored in OWL ontologies.
 
-\section{Hypercube-based knowledge extractors}\labelsec{contribution}
+\section{Hypercube-Based Knowledge Extractors}\labelsec{contribution}
 
-In this section we present a general hypercube-based extractor model (\xss{unified-model}).
+In this section we present a general model for hypercube-based extractors (\xss{unified-model}).
 %
 We then delve into the details of different algorithms from the literature, discussing how they match the model (\xss{existing-methods}).
 
 \subsection{Unified Model}\labelssec{unified-model}
 
-Hypercube-base extraction methods are \emph{pedagogical} extraction procedures which can operate on trained ML predictors of any sort.
+Hypercube-based extraction methods are \emph{pedagogical} extraction procedures which can operate on trained ML predictors of any sort.
 %
 They consider the predictor $P$ undergoing extraction as an oracle to be queried multiple times, in order to find a partitioning $H_1 \cup \ldots \cup H_n$ of its input space $\mathcal{X}$ such that the output space $\mathcal{Y}$ can be concisely %and correctly 
 expressed for each partition.
@@ -290,12 +288,12 @@ Hypercube-based extraction procedures should then attempt to select hypercubes a
 Accordingly, they follow a pretty linear workflow, which may be roughly summarised in 3 steps, namely:
 %
 \begin{enumerate}
-	\item partitioning the input space into disjoint hypercubes $H_1 \cup \ldots \cup H_n$, following a selected strategy and according to possible defined constraints;
+	\item partitioning the input space into disjoint hypercubes $H_1, \ldots, H_n$, following a selected strategy and according to possible defined constraints;
 	%
 	\begin{itemize}
 		\item e.g. one may be willing to minimise $n$ while maximising the size of each $H_i$
 	\end{itemize}
-	\item approximating the prediction of $P$ for each hypercube $H_i$, via some function $f_i$; and
+	\item approximating the prediction of $P$ for each hypercube $H_i$, via some function $f_i$;
 	%
 	\begin{itemize}
 		\item e.g. one may be willing to maximise the similarity among $P$ and $f_i$ in $H_i$
@@ -329,7 +327,7 @@ Alternatively, the partitioning process may terminate after a predefined number 
 %
 However, this may lead to the indiscriminate exclusion of some regions of the input space that, conversely, are not negligible.
 %
-In its turn, the explained model will not to be able to provide predictions for a subset of input instances.
+In turn, the explained model will not be able to provide predictions for a subset of input instances.
 
 Non-contiguous hypercubes may be relaxed into hierarchical or fuzzy regions, possibly mapped into non-overlapping rules, in order to have unambiguous output predictions.
 
@@ -337,7 +335,7 @@ Non-contiguous hypercubes may be relaxed into hierarchical or fuzzy regions, pos
 
 The amount of hypercubes an input space is partitioned into may significantly impact the interpretability of the final symbolic model.
 %
-In fact, hypercube-based methods will output as many rules as the hypercubes they have partitioned the input space into---and of course more (or more complex) rules imply lower readability for the human reader.
+In fact, hypercube-based methods will output as many rules as the hypercubes they have partitioned the input space into---and of course more (or more complex) rules imply lower readability for the human user.
 
 The capability of grouping together similar samples into a single hypercube is so quintessential for supporting the creation of few, general, and simple rules which capture the behaviour of the original predictor with high fidelity.
 %
@@ -366,7 +364,7 @@ Input space partitions may be considered similar according to the following defi
 %
 While it is straightforward to check input closeness (e.g., through Euclidean distance), dealing with output closeness requires taking into account the learning problem at hand.
 
-As far as classification is concerned, we may consider two hypercubes $H_1$ and $H_2$ as \emph{output-close} w.r.t. a predictor $P$ if (and only if) the most frequent output class is the same in both hypercubes:
+As far as classification is concerned, we may consider two hypercubes $H_1$ and $H_2$ as \emph{output-close} w.r.t.\ a predictor $P$ if (and only if) the most frequent output class is the same in both hypercubes:
 %
 \begin{equation}\label{eq:simClass}
 	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mode}(P(H_1)) = \text{mode}(P(H_2))\,
@@ -387,7 +385,7 @@ Of course, definition \ref{eq:simRegK} is not suitable to capture the similarity
 In such a case a more complex solution is required:
 %
 \begin{equation}\label{eq:simRegLin}
-	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mae}(f_{1,2}, H_1 \cup H_2) \leq (\text{mae}(f_1, H_1) + \text{mae}(f_2, H_2)) / 2 \,
+	H_1 \stackrel{P}{\approx} H_2 \Leftrightarrow \text{mae}(f_{1,2}, H_1 \cup H_2) \leq 0.5 (\text{mae}(f_1, H_1) + \text{mae}(f_2, H_2)) \,
 \end{equation}
 %
 where $\text{mae}(f, H)$ is the mean absolute error of the linear function $f$ in approximating 
@@ -444,7 +442,7 @@ The figure represents a classification task and two regression tasks.
 %
 The first regression task is approximated by the extractor with constant outputs, whereas the second is associated with non-constant outputs.
 %
-The predictive error is reported as misclassifications in the first case and absolute error in the others.
+The predictive error $e$ is reported as misclassifications in the first case and absolute error in the others.
  
 \subsubsection{Approximating predictions}
 
@@ -498,7 +496,7 @@ The Figure shows a classification task and two regression tasks, where the forme
 %
 The background colour represents the output provided by the extractor.
 
-\subsubsection{Output rules set creation}\labelssec{rule}
+\subsubsection{Output rule set creation}\labelssec{rule}
 
 After selecting a set of input space regions and one output decision for each of them, hypercube-based extractors build a set of rules where each one is composed of a precondition and a postcondition.
 %
@@ -518,13 +516,12 @@ where $O$ is the output decision and $X_1, X_2, ..., X_n$ are input variables as
 
 \subsection{Comparison of Existing Methods}\labelssec{existing-methods}
 
-In the following a comparison between the two hypercube-based SKE algorithms %cited in \xs{experiments} 
+In the following a comparison between two hypercube-based SKE algorithms %cited in \xs{experiments} 
 -- namely \iter{} and \gridex{} -- is provided to give a practical demonstration of our methodology.
 %
 Differences in the input space partitioning and in the decision approximation are highlighted in particular.
 %
-Output rules are lists of logic rules in both cases, following the convention described in \xf{rule}.
-\gctodo{Sta figura che cos'è?}
+Output rules are lists of logic rules in both cases, following the convention described in \xss{rule}.
 %
 It worths noting that both algorithms assume input features to be continuous and may be applied to any kind of BB predictor, being pedagogical SKE methods.
 
@@ -558,13 +555,13 @@ Unlike \iter{}, \gridex{} adopts a top-down approach to split the input feature 
 %
 It iteratively partitions the \emph{whole} space according to some defined strategy, marking at each iteration if the created partitions are \emph{negligible} (i.e., they contain no training samples, so they are discarded since it is not relevant to have rules associated to them), \emph{eligible} for further partitioning (if they contain samples that are not enough \emph{similar}), or \emph{permanent} (otherwise, if they contain similar training instances and, thus, these cubes should have a good predictive performance).
 %
-Strategies to split the input space are \emph{fixed}, if the user specifies for each iterations how many partitions have to be performed along all the input dimensions, or \emph{adaptive}, if the number of splits is determined through the relevance of each input feature w.r.t.\ the output variable.
+Strategies to split the input space are \emph{fixed}, if the user specifies for each iteration how many partitions have to be performed along all the input dimensions, or \emph{adaptive}, if the number of splits is determined through the relevance of each input feature w.r.t.\ the output variable.
 %
-Since \gridex{} has been designed exclusively for regression tasks, as \iter{}, also in this case output decisions are calculated via local averaging calculations and actual regression rules are not supported.
+Since \gridex{} has been designed exclusively for regression tasks, as \iter{}, also in this case output decisions are obtained via local averaging calculations and actual regression rules are not supported.
 
 Similarity between samples is assessed through the output value standard deviation of all the instances included inside a hypercube.
 %
-If the standard deviation is below a user-defined threshold, then the cube only contains similar samples and it is no further partitioned.
+If the standard deviation is below a user-defined threshold, then the cube only contains similar samples and it is not further partitioned.
 %
 Otherwise, \gridex{} attempts to split the cube in smaller regions, possibly enclosing more similar samples.
 %
